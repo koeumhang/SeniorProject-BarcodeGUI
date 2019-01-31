@@ -14,7 +14,7 @@ import android.widget.ImageButton;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1;
+    private static final int MY_PERMISSIONS_REQUEST_CAMERA = 1;
     private ImageButton scanButton;
 
     @Override
@@ -24,12 +24,12 @@ public class MainActivity extends AppCompatActivity {
 
 
         // Checks to see if permission is given from user to use CAMERA.
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_CALENDAR)
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
             // Permission is not granted.
             // Asking user for permission to use CAMERA.
             ActivityCompat.requestPermissions(this,
-                    new String[] {Manifest.permission.CAMERA}, MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+                    new String[] {Manifest.permission.CAMERA}, MY_PERMISSIONS_REQUEST_CAMERA);
         }
 
         scanButton = (ImageButton) findViewById(R.id.scanButton);
@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_READ_CONTACTS: {
+            case MY_PERMISSIONS_REQUEST_CAMERA: {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
