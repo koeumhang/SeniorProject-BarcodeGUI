@@ -65,8 +65,8 @@
         app:layout_constraintBottom_toTopOf="@+id/manageText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/scanButton"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3"/>
-        //app:srcCompat="@drawable/manage"
+        app:layout_constraintTop_toBottomOf="@+id/imageView3"
+        app:srcCompat="@drawable/manage"/>
 
     <TextView
         android:id="@+id/manageText"
@@ -94,8 +94,8 @@
         app:layout_constraintBottom_toTopOf="@+id/importText"
         app:layout_constraintEnd_toStartOf="@+id/exportButton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scanText"/>
-        //app:srcCompat="@drawable/import_icon"
+        app:layout_constraintTop_toBottomOf="@+id/scanText"
+        app:srcCompat="@drawable/import_icon" />
 
     <ImageButton
         android:id="@+id/exportButton"
@@ -108,8 +108,8 @@
         app:layout_constraintBottom_toTopOf="@+id/exportText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/importButton"
-        app:layout_constraintTop_toBottomOf="@+id/manageText" />
-        //app:srcCompat="@drawable/export" />
+        app:layout_constraintTop_toBottomOf="@+id/manageText"
+        app:srcCompat="@drawable/export" />
 
     <TextView
         android:id="@+id/importText"

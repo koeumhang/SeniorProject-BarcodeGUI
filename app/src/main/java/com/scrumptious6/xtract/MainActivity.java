@@ -16,19 +16,19 @@ import android.widget.TextView;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.barcode.Barcode;
 
+
 public class MainActivity extends AppCompatActivity {
 
-    private static final int MY_PERMISSIONS_REQUEST_CAMERA = 1;
-    private ImageButton scanButton;
-    private TextView barcodeResult;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+
+    private Button manual;
+    private TextView resultText;
+
+    public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-        // Checks to see if permission is given from user to use CAMERA.
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
             // Permission is not granted.
@@ -45,7 +45,20 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(barcodeActivity);
             }
         });
+        // Checks to see if permission is given from user to use CAMERA.
+
+
+
+
     }
+
+
+
+    private static final int MY_PERMISSIONS_REQUEST_CAMERA = 1;
+    private ImageButton scanButton;
+    private TextView barcodeResult;
+
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {

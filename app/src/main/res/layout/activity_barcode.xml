@@ -23,6 +23,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/camera_preview" />
 
+
+
+
     <SurfaceView
         android:id="@+id/camera_preview"
         android:layout_width="match_parent"
