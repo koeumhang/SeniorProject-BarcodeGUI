@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
                 integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
                 integrator.setPrompt("Scan");
                 integrator.setCameraId(0);
-                integrator.setBeepEnabled(false);
+                integrator.setBeepEnabled(true);
                 integrator.setBarcodeImageEnabled(false);
                 integrator.initiateScan();
             }
