@@ -31,11 +31,11 @@ public class BarcodeActivity extends AppCompatActivity {
 
     private SurfaceView cameraPreview;
     private Button manual;
-    private TextView resultText;
+        private TextView resultText;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_barcode);
 
         cameraPreview = (SurfaceView) findViewById(R.id.camera_preview);
