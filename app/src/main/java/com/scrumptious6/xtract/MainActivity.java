@@ -13,10 +13,10 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-//import com.google.zxing.integration.android.IntentIntegrator;
-//import com.google.zxing.integration.android.IntentResult;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
-/*
+
 public class MainActivity extends AppCompatActivity {
 
     private ImageButton button;
@@ -60,9 +60,11 @@ public class MainActivity extends AppCompatActivity {
 }
 
 
-*/
 
 
+/*
+
+-------------------------- old code -------------------------------------------------------
 
 import android.Manifest;
 import android.content.Intent;
@@ -174,3 +176,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 }
+*/
