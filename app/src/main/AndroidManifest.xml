@@ -12,7 +12,6 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar.Fullscreen"
         android:screenOrientation="portrait">
 
-        <activity android:name=".BarcodeActivity"></activity>
         <activity android:name=".MainActivity"
             android:label="Barcode Reader">
             <intent-filter>

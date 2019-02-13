@@ -1,21 +1,18 @@
 package com.journeyapps.barcodescanner;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.google.zxing.client.android.R;
-import com.scrumptious6.xtract.BarcodeActivity;
+
+import android.widget.Toast;
 
 /**
  *
@@ -28,6 +25,18 @@ public class CaptureActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(com.scrumptious6.xtract.R.layout.zxing_capture);
+        // components from main.xml
+        manual = (Button) this.findViewById(com.scrumptious6.xtract.R.id.manual);
+        // resultText = (TextView) findViewById(R.id.result);
+        manual.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getApplicationContext(),"Hello Javatpoint",Toast.LENGTH_SHORT).show();
+                showInputDialog();
+            }
+        });
 
         barcodeScannerView = initializeContent();
 
@@ -35,20 +44,7 @@ public class CaptureActivity extends AppCompatActivity {
         capture.initializeFromIntent(getIntent(), savedInstanceState);
         capture.decode();
 
-        setContentView(com.scrumptious6.xtract.R.layout.zxing_capture);
 
-
-        // components from main.xml
-        manual = (Button) findViewById(com.scrumptious6.xtract.R.id.manual);
-        // resultText = (TextView) findViewById(R.id.result);
-
-        manual.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                showInputDialog();
-            }
-        });
     }
 
         protected void showInputDialog() {
