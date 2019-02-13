@@ -24,5 +24,14 @@ public class ManagementActivity extends AppCompatActivity {
                 startActivity(scanlistActivity);
             }
         });
+
+        databaseButton = (Button) findViewById(R.id.databaseButton);
+        databaseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent dataActivity = new Intent(ManagementActivity.this, DatabaseActivity.class);
+                startActivity(dataActivity);
+            }
+        });
     }
 }

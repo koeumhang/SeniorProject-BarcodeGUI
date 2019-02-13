@@ -34,26 +34,22 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         String CREATE_SCANLIST_TABLE = "CREATE TABLE " + DATABASE_TEMP_TABLE + "("
                 + ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + BARCODE + " TEXT" + ")";
         db.execSQL(CREATE_SCANLIST_TABLE);
-        /*
-        //Creates the Scanlist Table
-        String CREATE_SCANLIST_TABLE = "CREATE TABLE " + DATABASE_TEMP_TABLE + "("
-                + ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + BARCODE + " TEXT" + ")";
-        db.execSQL(CREATE_SCANLIST_TABLE);
 
-        //Creates the Inventory Table
         String CREATE_ITEMS_TABLE = "CREATE TABLE " + DATABASE_TABLE + "("
                 + MATERIAL_NUM + " TEXT PRIMARY KEY," + MATERIAL_PLANT + " TEXT,"
                 + STORAGE_BIN + " TEXT," + MATERIAL_ATP + " INTEGER,"
                 + SAFETY_STOCK + " INTEGER"
                 + ")";
         db.execSQL(CREATE_ITEMS_TABLE);
-        */
-        String CREATE_ITEMS_TABLE = "CREATE TABLE " + DATABASE_TABLE + "("
-                + MATERIAL_NUM + " TEXT PRIMARY KEY," + MATERIAL_PLANT + " TEXT,"
-                + STORAGE_BIN + " TEXT," + MATERIAL_ATP + " INTEGER,"
-                + SAFETY_STOCK + " INTEGER"
-                + ")";
-        db.execSQL(CREATE_ITEMS_TABLE);
+
+        //String INSERT = "INSERT INTO " + DATABASE_TEMP_TABLE + "(" + BARCODE + ")" + " VALUES"
+        //        + "(" + "purple" +")";
+        //db.execSQL("INSERT INTO " + DATABASE_TEMP_TABLE + "(" + BARCODE + ")" + " VALUES"
+         //        + "(" + "purple" +")");
+
+        //db.execSQL("INSERT INTO " + DATABASE_TEMP_TABLE+ "(ID,BARCODE) VALUES (0, 'purple')");
+        db.execSQL("INSERT INTO " + DATABASE_TABLE+ "(MATERIAL_NUM,MATERIAL_PLANT,STORAGE_BIN,MATERIAL_ATP,SAFETY_STOCK) " +
+                "VALUES ('517','S095',null,1,0)");
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
@@ -66,6 +62,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public boolean insertScannedItem(String name){
         SQLiteDatabase idb = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
+        contentValues.put(ID, 1);
         contentValues.put(BARCODE, name);
         long result = idb.insert(DATABASE_TEMP_TABLE, null, contentValues);
         return result != -1; //if result = -1 data absent insert
@@ -74,6 +71,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public Cursor viewScanList(){
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT * from "+ DATABASE_TEMP_TABLE;
+        Cursor  cursor = db.rawQuery(query, null);
+        return cursor;
+    }
+    public Cursor viewDatabase(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * from "+ DATABASE_TABLE;
         Cursor  cursor = db.rawQuery(query, null);
         return cursor;
     }

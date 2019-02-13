@@ -12,7 +12,8 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar.Fullscreen">
-        <activity android:name=".ScanlistActivity"></activity>
+        <activity android:name=".DatabaseActivity"></activity>
+        <activity android:name=".ScanlistActivity" />
         <activity android:name=".ManagementActivity" />
         <activity
             android:name=".MainActivity"

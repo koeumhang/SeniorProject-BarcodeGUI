@@ -1,4 +1,5 @@
-package com.journeyapps.barcodescanner;
+//package com.journeyapps.barcodescanner;
+package com.scrumptious6.xtract;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -11,6 +12,9 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.google.zxing.client.android.R;
+import com.journeyapps.barcodescanner.CaptureManager;
+import com.journeyapps.barcodescanner.CompoundBarcodeView;
+import com.scrumptious6.xtract.DatabaseHandler;
 
 import android.widget.Toast;
 
@@ -21,6 +25,8 @@ public class CaptureActivity extends AppCompatActivity {
     private CaptureManager capture;
     private CompoundBarcodeView barcodeScannerView;
     private Button manual;
+
+    DatabaseHandler db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +49,9 @@ public class CaptureActivity extends AppCompatActivity {
         capture = new CaptureManager(this, barcodeScannerView);
         capture.initializeFromIntent(getIntent(), savedInstanceState);
         capture.decode();
+
+        db = new DatabaseHandler(this);
+        //db.insertScannedItem();
 
 
     }
