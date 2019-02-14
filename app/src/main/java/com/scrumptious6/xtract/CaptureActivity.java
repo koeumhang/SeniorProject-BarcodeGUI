@@ -50,7 +50,7 @@ public class CaptureActivity extends AppCompatActivity {
         capture.initializeFromIntent(getIntent(), savedInstanceState);
         capture.decode();
 
-        db = new DatabaseHandler(this);
+        //db = new DatabaseHandler(this);
         //db.insertScannedItem();
 
 

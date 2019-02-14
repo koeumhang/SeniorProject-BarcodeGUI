@@ -62,7 +62,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public boolean insertScannedItem(String name){
         SQLiteDatabase idb = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(ID, 1);
+        //contentValues.put(ID, 1);
         contentValues.put(BARCODE, name);
         long result = idb.insert(DATABASE_TEMP_TABLE, null, contentValues);
         return result != -1; //if result = -1 data absent insert

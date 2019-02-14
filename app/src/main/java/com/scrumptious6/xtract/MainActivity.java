@@ -36,6 +36,7 @@ import com.journeyapps.barcodescanner.CaptureActivity;
 
 public class MainActivity extends AppCompatActivity {
 
+    DatabaseHandler db;
     private ImageButton button;
     private ImageButton manageButton;
 
@@ -84,6 +85,9 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
             } else {
                 Log.d("MainActivity", "Scanned");
+                db = new DatabaseHandler(this);
+                db.insertScannedItem(result.getContents());
+
                 Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
             }
         } else {
