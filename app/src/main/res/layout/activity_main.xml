@@ -16,7 +16,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toTopOf="@+id/scanText"
-        app:layout_constraintEnd_toStartOf="@+id/imageButton"
+        app:layout_constraintEnd_toStartOf="@+id/manageButton"
         app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView3"
@@ -55,7 +55,7 @@
         app:layout_constraintTop_toBottomOf="@+id/scanButton" />
 
     <ImageButton
-        android:id="@+id/imageButton"
+        android:id="@+id/manageButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -79,9 +79,9 @@
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/exportButton"
-        app:layout_constraintEnd_toEndOf="@+id/imageButton"
-        app:layout_constraintStart_toStartOf="@+id/imageButton"
-        app:layout_constraintTop_toBottomOf="@+id/imageButton" />
+        app:layout_constraintEnd_toEndOf="@+id/manageButton"
+        app:layout_constraintStart_toStartOf="@+id/manageButton"
+        app:layout_constraintTop_toBottomOf="@+id/manageButton" />
 
     <ImageButton
         android:id="@+id/importButton"

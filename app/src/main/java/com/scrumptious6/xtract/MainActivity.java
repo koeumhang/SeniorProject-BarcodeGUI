@@ -36,9 +36,11 @@ import com.journeyapps.barcodescanner.CaptureActivity;
 
 public class MainActivity extends AppCompatActivity {
 
+    DatabaseHandler db;
     private ImageButton button;
+    private ImageButton manageButton;
 
-
+    ///Define of all buttons from the home page///
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,13 +59,18 @@ public class MainActivity extends AppCompatActivity {
                 integrator.initiateScan();
             }
         });
+        manageButton = (ImageButton) findViewById(R.id.manageButton);
+        manageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent manageActivity = new Intent(MainActivity.this, ManagementActivity.class);
+                startActivity(manageActivity);
+            }
+        });
+        //
 
 
     }
-
-
-
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -74,6 +81,10 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
             } else {
                 Log.d("MainActivity", "Scanned");
+                ///Add the scanned items in the database///
+                db = new DatabaseHandler(this);
+                db.insertScannedItem(result.getContents());
+
                 Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
             }
         } else {
