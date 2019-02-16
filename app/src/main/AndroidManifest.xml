@@ -9,21 +9,29 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar.Fullscreen">
-        <activity android:name=".DatabaseActivity"></activity>
-        <activity android:name=".ScanlistActivity" />
-        <activity android:name=".ManagementActivity" />
+        <activity
+            android:name=".DatabaseActivity"/>
+
+        <activity
+            android:name=".ScanlistActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ManagementActivity"
+            android:screenOrientation="portrait"/>
+
         <activity
             android:name=".MainActivity"
-            android:label="Barcode Reader">
+            android:label="Barcode Reader"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-    </application>
 
+    </application>
 </manifest>
