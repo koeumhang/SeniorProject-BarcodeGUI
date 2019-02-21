@@ -1,7 +1,4 @@
 package com.scrumptious6.xtract;
-
-
-
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
