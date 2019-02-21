@@ -10,6 +10,7 @@ public class ManagementActivity extends AppCompatActivity {
 
     private Button databaseButton, scanlistButton;
 
+    ///Define all the buttoms from the Management class///
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

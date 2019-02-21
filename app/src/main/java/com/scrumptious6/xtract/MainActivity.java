@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton button;
     private ImageButton manageButton;
 
-
+    ///Define of all buttons from the home page///
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,10 +72,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
-
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
@@ -85,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
             } else {
                 Log.d("MainActivity", "Scanned");
+                ///Add the scanned items in the database///
                 db = new DatabaseHandler(this);
                 db.insertScannedItem(result.getContents());
 

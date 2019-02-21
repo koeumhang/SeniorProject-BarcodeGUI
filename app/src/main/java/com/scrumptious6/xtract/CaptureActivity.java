@@ -49,11 +49,6 @@ public class CaptureActivity extends AppCompatActivity {
         capture = new CaptureManager(this, barcodeScannerView);
         capture.initializeFromIntent(getIntent(), savedInstanceState);
         capture.decode();
-
-        //db = new DatabaseHandler(this);
-        //db.insertScannedItem();
-
-
     }
 
         protected void showInputDialog() {
@@ -83,8 +78,6 @@ public class CaptureActivity extends AppCompatActivity {
             AlertDialog alert = alertDialogBuilder.create();
             alert.show();
         }
-
-
 
     /**
      * Override to use a different layout.

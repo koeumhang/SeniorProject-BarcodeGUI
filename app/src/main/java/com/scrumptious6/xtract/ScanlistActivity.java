@@ -3,48 +3,120 @@ package com.scrumptious6.xtract;
 //package com.scrumptious6.xtract;
 
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 import android.widget.Toast;
-
-import com.journeyapps.barcodescanner.CaptureManager;
-
-import java.util.ArrayList;
 
 public class ScanlistActivity extends AppCompatActivity
 {
-    DatabaseHandler db;
-    ArrayList<String> listitem;
-    ListView userlist;
-    ArrayAdapter adapter;
+    DatabaseHandler dbh;
+    //ArrayList<String> listitem;
+    //ListView userlist;
+    //ArrayAdapter adapter;
+    //TextView textView4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        db = new DatabaseHandler(this);
+        dbh = new DatabaseHandler(this);
         setContentView(R.layout.activity_scanlist);
-        listitem = new ArrayList<>();
-        userlist  = findViewById(R.id.users_list);
-        viewItem();
-    }
-    private void viewItem() {
-        Cursor cursor = db.viewScanList();
+        TableLayout tableLayout = (TableLayout) findViewById(R.id.tablelayout);
+        // Add header row
+        TableRow rowHeader = new TableRow(this);
+        rowHeader.setBackgroundColor(Color.parseColor("#c0c0c0"));
+        rowHeader.setLayoutParams(new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT,
+                TableLayout.LayoutParams.WRAP_CONTENT));
+        String[] headerText = {"BARCODE", "ATP"};
+        for (String c : headerText) {
+            TextView tv = new TextView(this);
+            tv.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
+                    TableRow.LayoutParams.WRAP_CONTENT));
+            tv.setGravity(Gravity.CENTER);
+            tv.setTextSize(18);
+            tv.setPadding(5, 5, 5, 5);
+            tv.setText(c);
+            rowHeader.addView(tv);
+        }
+        tableLayout.addView(rowHeader);
 
-        if (cursor == null){
-            Toast.makeText(this, "No data to show", Toast.LENGTH_SHORT).show();
-        }else{
-            while (cursor.moveToNext()){
-                listitem.add(cursor.getString(1)); // index 1 is name, 0 is Id
+        // Get data from sqlite database and add them to the table
+        // Open the database for reading
+        SQLiteDatabase db = dbh.getReadableDatabase();
+        // Start the transaction.
+        db.beginTransaction();
+        try {
+            String selectQuery = "SELECT * FROM " + DatabaseHandler.DATABASE_TEMP_TABLE;
+            Cursor cursor = db.rawQuery(selectQuery, null);
+            if (cursor.getCount() > 0) {
+                while (cursor.moveToNext()) {
+                    // Read columns data
+                    String outlet_barcode = cursor.getString(cursor.getColumnIndex("BARCODE"));
+                    int outlet_atp = cursor.getInt(cursor.getColumnIndex("SCANLIST_ITEM_ATP"));
+                    //String outlet_type = cursor.getString(cursor.getColumnIndex("outlet_type"));
+
+                    // dara rows
+                    TableRow row = new TableRow(this);
+                    row.setLayoutParams(new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT,
+                            TableLayout.LayoutParams.WRAP_CONTENT));
+                    //String[] colText = {outlet_id + "", outlet_name, outlet_type};
+                    String[] colText = {outlet_barcode, outlet_atp + ""};
+                    for (String text : colText) {
+                        TextView tv = new TextView(this);
+                        tv.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
+                                TableRow.LayoutParams.WRAP_CONTENT));
+                        tv.setGravity(Gravity.CENTER);
+                        tv.setTextSize(16);
+                        tv.setPadding(5, 5, 5, 5);
+                        tv.setText(text);
+                        row.addView(tv);
+                    }
+                    row.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Toast.makeText(ScanlistActivity.this, "Click item ", Toast.LENGTH_SHORT).show();
+
+                        }
+                    });
+                    tableLayout.addView(row);
+                }
+
             }
-            adapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,listitem);
-            userlist.setAdapter(adapter);
+            db.setTransactionSuccessful();
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+
+        } finally {
+            db.endTransaction();
+            // End the transaction.
+            db.close();
+            // Close database
         }
     }
+}
+  /* private void viewItem() {
+       Cursor cursor = db.viewScanList();
 
+       if (cursor == null){
+           Toast.makeText(this, "No data to show", Toast.LENGTH_SHORT).show();
+       }else{
+           while (cursor.moveToNext()){
+               listitem.add(cursor.getString(1)); // index 1 is name, 0 is Id
+           }
+           adapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,listitem);
+           userlist.setAdapter(adapter);
+       }
+   }
 }
 
 /*
@@ -53,15 +125,116 @@ import android.os.Bundle;
 import android.widget.ListView;
 
 public class ScanlistActivity extends AppCompatActivity {
-    DatabaseHandler db;
-    ListView itemlist;
+   DatabaseHandler db;
+   ListView itemlist;
+
+
+   @Override
+   protected void onCreate(Bundle savedInstanceState) {
+       super.onCreate(savedInstanceState);
+       setContentView(R.layout.activity_scanlist);
+       db = new DatabaseHandler(this);
+   }
+}
+*/
+
+
+/*
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
+import android.graphics.Color;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.Gravity;
+import android.view.View;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
+import android.widget.Toast;
+
+public class ScanlistActivity extends AppCompatActivity {
+    DatabaseHandler dbh;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        dbh = new DatabaseHandler(this);
+        ///This set the content view for the scanlist interface.///
         setContentView(R.layout.activity_scanlist);
-        db = new DatabaseHandler(this);
+        TableLayout tableLayout = (TableLayout) findViewById(R.id.tablelayout);
+        // Add header row
+        TableRow rowHeader = new TableRow(this);
+        rowHeader.setBackgroundColor(Color.parseColor("#c0c0c0"));
+        rowHeader.setLayoutParams(new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT,
+                TableLayout.LayoutParams.WRAP_CONTENT));
+        String[] headerText = {"BARCODE", "ATP"};
+        for (String c : headerText) {
+            TextView tv = new TextView(this);
+            tv.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
+                    TableRow.LayoutParams.WRAP_CONTENT));
+            tv.setGravity(Gravity.CENTER);
+            tv.setTextSize(18);
+            tv.setPadding(5, 5, 5, 5);
+            tv.setText(c);
+            rowHeader.addView(tv);
+        }
+        tableLayout.addView(rowHeader);
+
+        // Get data from sqlite database and add them to the table
+        // Open the database for reading
+        SQLiteDatabase db = dbh.getReadableDatabase();
+        // Start the transaction.
+        db.beginTransaction();
+        try {
+            String selectQuery = "SELECT * FROM " + DatabaseHandler.DATABASE_TEMP_TABLE;
+            Cursor cursor = db.rawQuery(selectQuery, null);
+            if (cursor.getCount() > 0) {
+                while (cursor.moveToNext()) {
+                    // Read columns data
+                    String outlet_barcode = cursor.getString(cursor.getColumnIndex("BARCODE"));
+                    int outlet_atp = cursor.getInt(cursor.getColumnIndex("SCANLIST_ITEM_ATP"));
+                    //String outlet_type = cursor.getString(cursor.getColumnIndex("outlet_type"));
+
+                    // dara rows
+                    TableRow row = new TableRow(this);
+                    row.setLayoutParams(new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT,
+                            TableLayout.LayoutParams.WRAP_CONTENT));
+                    //String[] colText = {outlet_id + "", outlet_name, outlet_type};
+                    String[] colText = {outlet_barcode, outlet_atp + ""};
+                    for (String text : colText) {
+                        TextView tv = new TextView(this);
+                        tv.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
+                                TableRow.LayoutParams.WRAP_CONTENT));
+                        tv.setGravity(Gravity.CENTER);
+                        tv.setTextSize(16);
+                        tv.setPadding(5, 5, 5, 5);
+                        tv.setText(text);
+                        row.addView(tv);
+                    }
+                    row.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Toast.makeText(ScanlistActivity.this, "Click item ", Toast.LENGTH_SHORT).show();
+
+                        }
+                    });
+                    tableLayout.addView(row);
+                }
+
+            }
+            db.setTransactionSuccessful();
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+
+        } finally {
+            db.endTransaction();
+            // End the transaction.
+            db.close();
+            // Close database
+        }
     }
 }
+
 */

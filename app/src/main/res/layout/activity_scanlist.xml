@@ -8,16 +8,18 @@
     android:gravity="center_horizontal"
     tools:context=".ScanlistActivity">
 
-    <ListView
-        android:id="@+id/users_list"
-        android:layout_width="453dp"
-        android:layout_height="526dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.206"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteY="73dp" />
+    <ScrollView
+        android:id="@+id/scroll"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints">
+        <TableLayout
+            android:id= "@+id/tablelayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:stretchColumns="*"
+            ></TableLayout>
+    </ScrollView>
+
 
 </android.support.constraint.ConstraintLayout>
