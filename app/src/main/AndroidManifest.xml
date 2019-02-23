@@ -11,17 +11,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar.Fullscreen">
-        <activity
-            android:name=".DatabaseActivity"/>
-
+        <activity android:name=".ImportActivity"></activity>
+        <activity android:name=".DatabaseActivity" />
         <activity
             android:name=".ScanlistActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ManagementActivity"
-            android:screenOrientation="portrait"/>
-
+            android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"
             android:label="Barcode Reader"
@@ -32,6 +29,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
+
 </manifest>
