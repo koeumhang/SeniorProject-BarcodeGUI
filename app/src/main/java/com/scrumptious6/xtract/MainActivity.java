@@ -37,7 +37,7 @@ import com.journeyapps.barcodescanner.CaptureActivity;
 public class MainActivity extends AppCompatActivity {
 
     DatabaseHandler db;
-    private ImageButton button;
+    private ImageButton scanButton;
     private ImageButton manageButton;
 
     ///Define of all buttons from the home page///
@@ -45,21 +45,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        button = (ImageButton) this.findViewById(R.id.scanButton);
+        scanButton = this.findViewById(R.id.scanButton);
         final Activity activity = this;
-        button.setOnClickListener(new View.OnClickListener() {
+        scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                IntentIntegrator integrator = new IntentIntegrator(activity);
-                integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
-                integrator.setPrompt("Scan");
-                integrator.setCameraId(0);
-                integrator.setBeepEnabled(true);
-                integrator.setBarcodeImageEnabled(false);
-                integrator.initiateScan();
+              Intent intent = new Intent(MainActivity.this, BarcodeActivity.class);
+              startActivity(intent);
             }
         });
-        manageButton = (ImageButton) findViewById(R.id.manageButton);
+        manageButton = findViewById(R.id.manageButton);
         manageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,7 +62,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(manageActivity);
             }
         });
-        //
 
 
     }
