@@ -4,9 +4,11 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -17,7 +19,9 @@ import java.io.InputStreamReader;
 
 public class ImportActivity extends AppCompatActivity {
     DatabaseHandler db;
+    private int mProgress = 0;
     private static final int READ_REQUEST_CODE = 42;
+    MyTask myTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,28 +54,24 @@ public class ImportActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         StringBuilder stringBuilder = new StringBuilder();
         String line= "";
         stringBuilder.append(line);
         String str1 = "INSERT INTO Inventory_Table values('";
-        String str2 = "');";
-        int sizeInBytes;
-        int currentBytes = 0;
-        Uri uri = null;
-        if(data != null){
-            uri = data.getData();
+        Uri uri = data.getData();
+
+        if(uri != null){
             try {
                 InputStream inputStream = getContentResolver().openInputStream(uri);
                 BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-                sizeInBytes = inputStream.available();
                 line = reader.readLine();
                 db.clearDatabase();
                 while ((line = reader.readLine()) != null) {
                     stringBuilder.setLength(0);
                     String[] tokens = line.split(",");
                     stringBuilder.append(str1 + tokens[0] + "','" + tokens[1] + "','" +
-                            tokens[2] + "','" + tokens[3] + "','" + tokens[4]);
-                    stringBuilder.append(str2);
+                            tokens[2] + "','" + tokens[3] + "','" + tokens[4] + "');");
                     db.importDatabase(stringBuilder);
                 }
                 inputStream.close();
@@ -80,5 +80,24 @@ public class ImportActivity extends AppCompatActivity {
             }
         }
         finish();
+    }
+
+    class MyTask extends AsyncTask<String, String, String>{
+
+        @Override
+        protected String doInBackground(String... strings) {
+            //TODO: Implement an Async task to display progress
+            int bytes = 0;
+            while(bytes <= 100){
+
+            }
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(String... values) {
+            super.onProgressUpdate(values);
+
+        }
     }
 }
