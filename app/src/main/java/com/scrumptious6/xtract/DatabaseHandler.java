@@ -1,6 +1,5 @@
 package com.scrumptious6.xtract;
 
-import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -18,8 +17,8 @@ import java.io.InputStream;
 public class DatabaseHandler extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "Inventory.db";
-    private static final String DATABASE_TABLE = "Inventory_Table";
-    private static final String DATABASE_TEMP_TABLE = "Scanlist_Table";
+    public static final String DATABASE_TABLE = "Inventory_Table";
+    public static final String DATABASE_TEMP_TABLE = "Scanlist_Table";
 
     //Columns for Inventory Table
     private static final String MATERIAL_NUM = "MATERIAL_NUM";
@@ -35,14 +34,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, 1);
     }
-
     @Override
     public void onCreate(SQLiteDatabase db)
     {
+       /*String CREATE_SCANLIST_TABLE = "CREATE TABLE " + DATABASE_TEMP_TABLE + "("
+               + ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + BARCODE + " TEXT" + ")";*/
         ///The Scanlist table is created in the inventory database.
         String CREATE_SCANLIST_TABLE = "CREATE TABLE " + DATABASE_TEMP_TABLE + "("
-                + ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + BARCODE + " TEXT" + ")";
+                + BARCODE + " TEXT PRIMARY KEY," + SCANLIST_ITEM_ATP + " INTEGER" + ")";
         db.execSQL(CREATE_SCANLIST_TABLE);
+
 
         ///The Inventory table is created in the inventory database
         String CREATE_ITEMS_TABLE = "CREATE TABLE " + DATABASE_TABLE + "("
@@ -50,7 +51,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + STORAGE_BIN + " VARCHAR(25)," + MATERIAL_ATP + " INTEGER,"
                 + SAFETY_STOCK + " INTEGER"
                 + ")";
-
         db.execSQL(CREATE_ITEMS_TABLE);
 
         //String INSERT = "INSERT INTO " + DATABASE_TEMP_TABLE + "(" + BARCODE + ")" + " VALUES"
