@@ -1,4 +1,4 @@
-package com.journeyapps.barcodescanner;
+package com.scrumptious6.xtract;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.google.zxing.client.android.R;
+import com.journeyapps.barcodescanner.CaptureManager;
+import com.journeyapps.barcodescanner.CompoundBarcodeView;
 
 import android.widget.Toast;
 
@@ -26,9 +28,9 @@ public class CaptureActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(com.scrumptious6.xtract.R.layout.zxing_capture);
-        // components from main.xml
+
+        //TODO: See if manual button can be functional
         manual = (Button) this.findViewById(com.scrumptious6.xtract.R.id.manual);
-        // resultText = (TextView) findViewById(R.id.result);
         manual.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -43,8 +45,6 @@ public class CaptureActivity extends AppCompatActivity {
         capture = new CaptureManager(this, barcodeScannerView);
         capture.initializeFromIntent(getIntent(), savedInstanceState);
         capture.decode();
-
-
     }
 
         protected void showInputDialog() {
