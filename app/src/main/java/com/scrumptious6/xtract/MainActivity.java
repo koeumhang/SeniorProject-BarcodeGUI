@@ -1,20 +1,20 @@
 package com.scrumptious6.xtract;
 
-
-
+import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
-
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-
+/*
+    This class defines the main screen of the application.
+ */
 public class MainActivity extends AppCompatActivity {
 
     DatabaseHandler db;
@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton manageButton;
     private ImageButton importButton;
 
+    ///Define of all buttons from the home page///
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,11 +35,10 @@ public class MainActivity extends AppCompatActivity {
         scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent scanActivity = new Intent(MainActivity.this, CaptureActivity.class);
-                startActivity(scanActivity);
+                Intent intent = new Intent(MainActivity.this, BarcodeActivity.class);
+                startActivity(intent);
             }
         });
-
         manageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -46,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(manageActivity);
             }
         });
-
         importButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

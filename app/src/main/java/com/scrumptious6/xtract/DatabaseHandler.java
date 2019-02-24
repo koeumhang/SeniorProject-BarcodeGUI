@@ -28,8 +28,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String SAFETY_STOCK = "SAFETY_STOCK";
 
     //Column for Scanlist Table
-    private static final String ID = "ID";
+    //private static final String ID = "ID";
     private static final String BARCODE = "BARCODE";
+    private static final String SCANLIST_ITEM_ATP = "SCANLIST_ITEM_ATP";
+    private SQLiteDatabase dbh;
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, 1);
@@ -37,13 +39,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db)
     {
-       /*String CREATE_SCANLIST_TABLE = "CREATE TABLE " + DATABASE_TEMP_TABLE + "("
-               + ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + BARCODE + " TEXT" + ")";*/
         ///The Scanlist table is created in the inventory database.
         String CREATE_SCANLIST_TABLE = "CREATE TABLE " + DATABASE_TEMP_TABLE + "("
                 + BARCODE + " TEXT PRIMARY KEY," + SCANLIST_ITEM_ATP + " INTEGER" + ")";
         db.execSQL(CREATE_SCANLIST_TABLE);
-
 
         ///The Inventory table is created in the inventory database
         String CREATE_ITEMS_TABLE = "CREATE TABLE " + DATABASE_TABLE + "("
@@ -52,15 +51,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + SAFETY_STOCK + " INTEGER"
                 + ")";
         db.execSQL(CREATE_ITEMS_TABLE);
-
-        //String INSERT = "INSERT INTO " + DATABASE_TEMP_TABLE + "(" + BARCODE + ")" + " VALUES"
-        //        + "(" + "purple" +")";
-        //db.execSQL("INSERT INTO " + DATABASE_TEMP_TABLE + "(" + BARCODE + ")" + " VALUES"
-        //        + "(" + "purple" +")");
-
-        //db.execSQL("INSERT INTO " + DATABASE_TEMP_TABLE+ "(ID,BARCODE) VALUES (0, 'purple')");
-        //db.execSQL("INSERT INTO " + DATABASE_TABLE+ "(MATERIAL_NUM,MATERIAL_PLANT,STORAGE_BIN,MATERIAL_ATP,SAFETY_STOCK) " +
-         //       "VALUES ('517','S095',null,1,0)");
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
@@ -73,24 +63,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public boolean insertScannedItem(String name){
         SQLiteDatabase idb = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        //contentValues.put(ID, 1);
         contentValues.put(BARCODE, name);
         long result = idb.insert(DATABASE_TEMP_TABLE, null, contentValues);
+        //long result = idb.insertWithOnConflict(DATABASE_TEMP_TABLE, null, contentValues, SQLiteDatabase.CONFLICT_IGNORE);
         return result != -1; //if result = -1 data absent insert
-    }
-    ///To view the Scanlist items///
-    public Cursor viewScanList(){
-        SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT * from "+ DATABASE_TEMP_TABLE;
-        Cursor  cursor = db.rawQuery(query, null);
-        return cursor;
-    }
-    ///To view the Database items///
-    public Cursor viewDatabase(){
-        SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT * from "+ DATABASE_TABLE;
-        Cursor  cursor = db.rawQuery(query, null);
-        return cursor;
     }
 
     public void clearDatabase(){
