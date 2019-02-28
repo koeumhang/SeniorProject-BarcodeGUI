@@ -25,6 +25,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     //private static final String ID = "ID";
     private static final String BARCODE = "BARCODE";
     private static final String SCANLIST_ITEM_ATP = "SCANLIST_ITEM_ATP";
+    private static final String SCANLIST_ITEM_STORAGE_BIN = "SCANLIST_ITEM_STORAGE_BIN";
     private SQLiteDatabase dbh;
 
     public DatabaseHandler(Context context) {
@@ -36,7 +37,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
        /*String CREATE_SCANLIST_TABLE = "CREATE TABLE " + DATABASE_TEMP_TABLE + "("
                + ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + BARCODE + " TEXT" + ")";*/
         String CREATE_SCANLIST_TABLE = "CREATE TABLE " + DATABASE_TEMP_TABLE + "("
-                + BARCODE + " TEXT PRIMARY KEY," + SCANLIST_ITEM_ATP + " INTEGER" + ")";
+                + BARCODE + " TEXT PRIMARY KEY,"
+                + SCANLIST_ITEM_ATP + " INTEGER,"
+                + SCANLIST_ITEM_STORAGE_BIN + " TEXT"
+                + ")";
         db.execSQL(CREATE_SCANLIST_TABLE);
 
         String CREATE_ITEMS_TABLE = "CREATE TABLE " + DATABASE_TABLE + "("
