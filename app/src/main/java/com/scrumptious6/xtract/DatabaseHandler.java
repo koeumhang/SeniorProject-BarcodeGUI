@@ -7,6 +7,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.EditText;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
@@ -34,8 +35,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db)
     {
-       /*String CREATE_SCANLIST_TABLE = "CREATE TABLE " + DATABASE_TEMP_TABLE + "("
-               + ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + BARCODE + " TEXT" + ")";*/
         String CREATE_SCANLIST_TABLE = "CREATE TABLE " + DATABASE_TEMP_TABLE + "("
                 + BARCODE + " TEXT PRIMARY KEY,"
                 + SCANLIST_ITEM_ATP + " INTEGER,"
@@ -55,7 +54,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
     {
-        //db.execSQL("DROP TABLE IF EXISTS "+ DATABASE_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS "+ DATABASE_TABLE);
         db.execSQL("DROP TABLE IF EXISTS "+ DATABASE_TEMP_TABLE);
         onCreate(db);
     }
@@ -67,5 +66,18 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         long result = idb.insert(DATABASE_TEMP_TABLE, null, contentValues);
         //long result = idb.insertWithOnConflict(DATABASE_TEMP_TABLE, null, contentValues, SQLiteDatabase.CONFLICT_IGNORE);
         return result != -1; //if result = -1 data absent insert
+    }
+    public void insert(DataClass s){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(BARCODE, s.getBarcode());
+        contentValues.put(SCANLIST_ITEM_ATP, s.getAtp());
+        contentValues.put(SCANLIST_ITEM_STORAGE_BIN, s.getStorage());
+        //contentValues.put(SCANLIST_ITEM_ATP,num);
+       // contentValues.put(SCANLIST_ITEM_STORAGE_BIN, storage);
+        db.insert(DATABASE_TEMP_TABLE,null,contentValues);
+        //db.close();
+        //if(ins == -1) return false;
+        //else return true;
     }
 }
