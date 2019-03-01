@@ -29,8 +29,8 @@ public class ScanlistActivity extends AppCompatActivity
     private ImageButton addB;
     DatabaseHandler db;
     String bar, quan, storage;
-
     //private String m_Text = "";
+    DataClass data = new DataClass();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,11 +43,11 @@ public class ScanlistActivity extends AppCompatActivity
         //quan = (EditText) findViewById(R.id.atp);
         //storage = (EditText) findViewById(R.id.storage);
         addB = (ImageButton) findViewById(R.id.addB);
+
         addB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(ScanlistActivity.this);
-                //builder.setTitle("ADD");
 
                 View view = getLayoutInflater().inflate(R.layout.activity_add_data,null);
                 final EditText barcodeIn = view.findViewById(R.id.barcode);
@@ -67,65 +67,22 @@ public class ScanlistActivity extends AppCompatActivity
                             bar = barcodeIn.getText().toString();
                             quan = atpIn.getText().toString();
                             storage = storageIn.getText().toString();
-                            DataClass data = new DataClass();
+
                             data.setBarcode(bar);
                             data.setAtp(Integer.parseInt(quan));
                             data.setStorage(storage);
                             db.insert(data);
                             Toast.makeText(ScanlistActivity.this, "Item is added", Toast.LENGTH_SHORT).show();
                             dialog.dismiss();
+                            Intent scanlistActivity = new Intent(ScanlistActivity.this, ScanlistActivity.class);
+                            startActivity(scanlistActivity);
                         }else{
                             Toast.makeText(ScanlistActivity.this, "Error", Toast.LENGTH_SHORT).show();
 
                         }
+
                     }
                 });
-
-
-
-
-                /*
-// Set up the input
-                final EditText barcodeIn = new EditText(ScanlistActivity.this);
-// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-                barcodeIn.setInputType(InputType.TYPE_CLASS_TEXT); //| InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                builder.setView(barcodeIn);
-
-                final EditText atpIn = new EditText(ScanlistActivity.this);
-// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-                atpIn.setInputType(InputType.TYPE_CLASS_TEXT); //| InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                builder.setView(atpIn);
-
-                final EditText storageIn = new EditText(ScanlistActivity.this);
-// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-                storageIn.setInputType(InputType.TYPE_CLASS_TEXT);// | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                builder.setView(storageIn);
-*/
-// Set up the buttons
-                /*
-                builder.setPositiveButton("ADD", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        bar = barcodeIn.getText().toString();
-                        quan = atpIn.getText().toString();
-                        storage = storageIn.getText().toString();
-                        DataClass data = new DataClass();
-                        data.setBarcode(bar);
-                        data.setAtp(Integer.parseInt(quan));
-                        data.setStorage(storage);
-                        db.insert(data);
-                    }
-                });
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-
-                builder.show();*/
-                //Intent addActivity = new Intent(ScanlistActivity.this, AddDataActivity.class);
-                //startActivity(addActivity);
             }
         });
         TableLayout tableLayout = (TableLayout) findViewById(R.id.tablelayout);
@@ -184,6 +141,52 @@ public class ScanlistActivity extends AppCompatActivity
                         @Override
                         public void onClick(View v) {
                             Toast.makeText(ScanlistActivity.this, "Click item ", Toast.LENGTH_SHORT).show();
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            AlertDialog.Builder builder = new AlertDialog.Builder(ScanlistActivity.this);
+
+                            View view = getLayoutInflater().inflate(R.layout.update_delete,null);
+                            final EditText barcodeIn = view.findViewById(R.id.barcode);
+                            final EditText atpIn = view.findViewById(R.id.atp);
+                            final EditText storageIn = view.findViewById(R.id.storage);
+                            Button update = view.findViewById(R.id.updateButton);
+                            Button delete = view.findViewById(R.id.deleteButton);
+                            Button cancel = view.findViewById(R.id.cancelButton);
+
+                            builder.setView(view);
+
+                            barcodeIn.setText(data.getBarcode());
+                            atpIn.setText(String.valueOf(data.getAtp()));
+                            storageIn.setText(data.getStorage());
+
+                            final AlertDialog dialog = builder.create();
+                            dialog.show();
+                            //update button
+                            update.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+
+                                    bar = barcodeIn.getText().toString();
+                                    quan = atpIn.getText().toString();
+                                    storage = storageIn.getText().toString();
+                                    if(!barcodeIn.getText().toString().isEmpty()  && !atpIn.getText().toString().isEmpty()&& !storageIn.getText().toString().isEmpty()) {
+                                        dbh.update(bar,quan,storage);
+                                        Toast.makeText(ScanlistActivity.this, "Item is updated", Toast.LENGTH_SHORT).show();
+                                    }else {
+                                        Toast.makeText(ScanlistActivity.this, "Error", Toast.LENGTH_SHORT).show();
+
+                                    }
+
+                                }
+                            });
+                            cancel.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    dialog.dismiss();
+                                    Intent scanlistActivity = new Intent(ScanlistActivity.this, ScanlistActivity.class);
+                                    startActivity(scanlistActivity);
+                                }
+                            });
+
 
                         }
                     });
@@ -192,16 +195,6 @@ public class ScanlistActivity extends AppCompatActivity
 
             }
             db.setTransactionSuccessful();
-            //barCode = (EditText) findViewById(R.id.Barcode);
-            //location = (EditText) findViewById(R.id.ATP);
-            //quan = (EditText) findViewById(R.id.Quantity);
-            //addB = (ImageButton) findViewById(R.id.addB);
-            //    public String onClick(View v){
-             //       String s1 = barCode.getText().toString();
-               //     String s2 = location.getText().toString();
-               //     String s3 = quan.getText().toString();
-
-                //}
 
         } catch (SQLiteException e) {
             e.printStackTrace();
@@ -212,5 +205,29 @@ public class ScanlistActivity extends AppCompatActivity
             db.close();
             // Close database
         }
+    }
+    private void reload() {
+        SQLiteDatabase db = dbh.getReadableDatabase();
+        String selectQuery = "SELECT * FROM " + DatabaseHandler.DATABASE_TEMP_TABLE;
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        //Cursor cursorEmployees = d.rawQuery("SELECT * FROM DATABASE_TEMP_TABLE", null);
+        /*
+        if (cursor.moveToFirst()) {
+            employeeList.clear();
+            do {
+                employeeList.add(new Employee(
+                        cursorEmployees.getInt(0),
+                        cursorEmployees.getString(1),
+                        cursorEmployees.getString(2),
+                        cursorEmployees.getString(3),
+                        cursorEmployees.getDouble(4)
+                ));
+            } while (cursorEmployees.moveToNext());
+        }
+
+        cursorEmployees.close();
+        notifyDataSetChanged();
+        */
     }
 }

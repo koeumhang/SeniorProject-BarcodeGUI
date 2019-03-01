@@ -76,8 +76,19 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         //contentValues.put(SCANLIST_ITEM_ATP,num);
        // contentValues.put(SCANLIST_ITEM_STORAGE_BIN, storage);
         db.insert(DATABASE_TEMP_TABLE,null,contentValues);
-        //db.close();
+        db.close();
         //if(ins == -1) return false;
         //else return true;
     }
+    public void update(String bar, String quan, String storage)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String sql = "UPDATE DATABASE_TEMP_TABLE \n" +
+                "SET BARCODE = ?, \n" +
+                "SCANLIST_ITEM_ATP = ?, \n" +
+                "SCANLIST_ITEM_STORAGE_BIN = ? \n" +
+                "WHERE BARCODE = ?;\n";
+        db.execSQL(sql, new String[]{bar, quan, storage});
+    }
+
 }
