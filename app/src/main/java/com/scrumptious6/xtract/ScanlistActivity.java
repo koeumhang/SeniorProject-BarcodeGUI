@@ -210,7 +210,7 @@ public class ScanlistActivity extends AppCompatActivity
         SQLiteDatabase db = dbh.getReadableDatabase();
         String selectQuery = "SELECT * FROM " + DatabaseHandler.DATABASE_TEMP_TABLE;
         Cursor cursor = db.rawQuery(selectQuery, null);
-        //
+        ///
         //Cursor cursorEmployees = d.rawQuery("SELECT * FROM DATABASE_TEMP_TABLE", null);
         /*
         if (cursor.moveToFirst()) {
