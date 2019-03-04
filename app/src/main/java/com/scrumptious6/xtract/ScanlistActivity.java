@@ -94,7 +94,7 @@ public class ScanlistActivity extends AppCompatActivity
                 });
             }
         });
-        TableLayout tableLayout = (TableLayout) findViewById(R.id.tablelayout);
+        final TableLayout tableLayout = (TableLayout) findViewById(R.id.tablelayout);
         // Add header row
         TableRow rowHeader = new TableRow(this);
         rowHeader.setBackgroundColor(Color.parseColor("#c0c0c0"));
@@ -146,7 +146,9 @@ public class ScanlistActivity extends AppCompatActivity
                         tv.setText(text);
                         row.addView(tv);
                     }
+
                     row.setOnClickListener(new View.OnClickListener() {
+                        int index = 0;
                         @Override
                         public void onClick(View v) {
                             Toast.makeText(ScanlistActivity.this, "Click item ", Toast.LENGTH_SHORT).show();
@@ -163,12 +165,17 @@ public class ScanlistActivity extends AppCompatActivity
                             //System.out.println("-------------------------------------------------------------------------------------------------------");
 
                             List<DataClass> contacts = getAllContacts();
-                            for (DataClass cn : contacts) {
+                            index = tableLayout.indexOfChild(v);
+                            index--;
+                            //index = Math.min(Math.max(index, 0), contacts.size() - 1);
+                            DataClass cn = contacts.get(index);
+
+                            //for ( cn : contacts) {
                                 String log = "Barcode: "+cn.getBarcode()+" ,ATP: " + cn.getAtp() + " ,Storage: " + cn.getStorage();
                                 barcodeIn.setText(cn.getBarcode());
                                 atpIn.setText(String.valueOf(cn.getAtp()));
                                 storageIn.setText(cn.getStorage());
-                            }
+                            //}
                             builder.setView(view);
                             //reload();
                             /*barcodeIn.setText(data.getBarcode());
@@ -280,16 +287,19 @@ public class ScanlistActivity extends AppCompatActivity
         Cursor cursor = db.rawQuery(selectQuery, null);
 
         {
-            while (cursor.moveToNext()) {
-                DataClass contact = new DataClass();
-                contact.setBarcode(cursor.getString(0));
-                contact.setAtp(Integer.parseInt(cursor.getString(1)));
-                contact.setStorage(cursor.getString(2));
-                contactList.add(contact);
+            if (cursor.moveToFirst()) {
+                do {
+                    DataClass contact = new DataClass();
+                    contact.setBarcode(cursor.getString(0));
+                    contact.setAtp(Integer.parseInt(cursor.getString(1)));
+                    contact.setStorage(cursor.getString(2));
+                    contactList.add(contact);
+                }while(cursor.moveToNext());
             }
+           // cursor.moveToFirst();
             cursor.close();
         }
-        System.out.print("-------------------------------------------------------------------------------------------------------------");
+        //System.out.print("-------------------------------------------------------------------------------------------------------------");
         return contactList;
     }
 
