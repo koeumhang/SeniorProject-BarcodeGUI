@@ -9,6 +9,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.EditText;
 
+import java.util.ArrayList;
+
 public class DatabaseHandler extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "Inventory.db";
@@ -32,6 +34,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, 1);
     }
+
     @Override
     public void onCreate(SQLiteDatabase db)
     {
@@ -77,9 +80,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
        // contentValues.put(SCANLIST_ITEM_STORAGE_BIN, storage);
         db.insert(DATABASE_TEMP_TABLE,null,contentValues);
         db.close();
+
         //if(ins == -1) return false;
         //else return true;
     }
+
     public void update(String bar, String quan, String storage)
     {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -88,7 +93,42 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 "SCANLIST_ITEM_ATP = ?, \n" +
                 "SCANLIST_ITEM_STORAGE_BIN = ? \n" +
                 "WHERE BARCODE = ?;\n";
-        db.execSQL(sql, new String[]{bar, quan, storage});
+        db.execSQL(sql, new String[]{bar, String.valueOf(quan), storage});
     }
+    /*
+    public ArrayList<String> fetch_Edittext() {
+        ArrayList<String> arr_ = new ArrayList<String>();
+        String selectQuery = "Select * FROM " + DATABASE_TEMP_TABLE;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                arr_.add(cursor.getString(0));
+
+            } while (cursor.moveToNext());
+        }
+        db.close();
+        return arr_;
+    }
+
+
+    public Cursor fetch() {
+        ArrayList<String> arr_ = new ArrayList<String>();
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cs = db.rawQuery("select * from " + DATABASE_TEMP_TABLE,null );
+        if (cs.moveToFirst()) {
+            do {
+                arr_.add(cs.getString(0));
+
+            } while (cs.moveToNext());
+        }
+        db.close();
+        //return arr_;
+        return  cs;
+    }*/
+
+
 
 }
