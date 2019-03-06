@@ -1,17 +1,12 @@
 package com.scrumptious6.xtract;
 
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.InputType;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -22,24 +17,17 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.zxing.client.android.Intents;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class ScanlistActivity extends AppCompatActivity
 {
     DatabaseHandler dbh;
-
     private ImageButton addB;
     DatabaseHandler db;
     String bar, quan, storage;
-    List<DataClass> inventoryList;
+    TableLayout tableLayout;
     DataClass data = new DataClass();
-    InventoryList list;
-    Cursor cs;
-    SQLiteDatabase sd;
-    String GetSQliteQuery;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,11 +36,8 @@ public class ScanlistActivity extends AppCompatActivity
         dbh = new DatabaseHandler(this);
         setContentView(R.layout.activity_scanlist);
         db = new DatabaseHandler(this);
-        //bar = (EditText) findViewById(R.id.barcode);
-        //quan = (EditText) findViewById(R.id.atp);
-        //storage = (EditText) findViewById(R.id.storage);
+        displayTable();
         addB = (ImageButton) findViewById(R.id.addB);
-        //inventoryList = new ArrayList<>();
         addB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,20 +67,22 @@ public class ScanlistActivity extends AppCompatActivity
                             data.setStorage(storage);
                             db.insert(data);
                             Toast.makeText(ScanlistActivity.this, "Item is added", Toast.LENGTH_SHORT).show();
+                            tableLayout.removeAllViewsInLayout();
+                            displayTable();
                             dialog.dismiss();
-                            Intent scanlistActivity = new Intent(ScanlistActivity.this, ScanlistActivity.class);
-                            startActivity(scanlistActivity);
                         }else{
                             Toast.makeText(ScanlistActivity.this, "Error", Toast.LENGTH_SHORT).show();
-
                         }
 
                     }
                 });
             }
         });
-        final TableLayout tableLayout = (TableLayout) findViewById(R.id.tablelayout);
+    }
+    public void displayTable()
+    {
         // Add header row
+        tableLayout = (TableLayout) findViewById(R.id.tablelayout);
         TableRow rowHeader = new TableRow(this);
         rowHeader.setBackgroundColor(Color.parseColor("#c0c0c0"));
         rowHeader.setLayoutParams(new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT,
@@ -162,74 +149,21 @@ public class ScanlistActivity extends AppCompatActivity
                             Button update = view.findViewById(R.id.updateButton);
                             Button delete = view.findViewById(R.id.deleteButton);
                             Button cancel = view.findViewById(R.id.cancelButton);
-                            //System.out.println("-------------------------------------------------------------------------------------------------------");
 
                             List<DataClass> contacts = getAllContacts();
                             index = tableLayout.indexOfChild(v);
                             index--;
-                            //index = Math.min(Math.max(index, 0), contacts.size() - 1);
                             DataClass cn = contacts.get(index);
-
-                            //for ( cn : contacts) {
-                                String log = "Barcode: "+cn.getBarcode()+" ,ATP: " + cn.getAtp() + " ,Storage: " + cn.getStorage();
-                                barcodeIn.setText(cn.getBarcode());
-                                atpIn.setText(String.valueOf(cn.getAtp()));
-                                storageIn.setText(cn.getStorage());
-                            //}
+                            //String log = "Barcode: "+cn.getBarcode()+" ,ATP: " + cn.getAtp() + " ,Storage: " + cn.getStorage();
+                            barcodeIn.setText(cn.getBarcode());
+                            atpIn.setText(String.valueOf(cn.getAtp()));
+                            storageIn.setText(cn.getStorage());
                             builder.setView(view);
-                            //reload();
-                            /*barcodeIn.setText(data.getBarcode());
-                            atpIn.setText(String.valueOf(data.getAtp()));
-                            storageIn.setText(data.getStorage());*/
-                            //System.out.println(data.getBarcode());
-                            /*
-                            builder.setView(view);
-                            bar = barcodeIn.getText().toString();
-                            quan = atpIn.getText().toString();
-                            storage = storageIn.getText().toString();
-                            */
-                            /*
-                            data.setBarcode(bar);
-                            data.setAtp(Integer.parseInt(quan));
-                            data.setStorage(storage);
-                            */
-                            /*Cursor cursor = this.sd.query(SQLiteHelper.TABLE_NAME_STUDENT, new String[]{SQLiteHelper._ID, SQLiteHelper.NAME, SQLiteHelper.AGE}, null, null, null, null, null);
-                            if (cursor != null) {
-                                cursor.moveToFirst();
-                            }
-                            return cursor;*/
-
-
-                            /*
-                            GetSQliteQuery = "SELECT * FROM DATABASE_TEMP_TABLE" ;
-                            sd = openOrCreateDatabase("Scanlist_Table", Context.MODE_PRIVATE, null);
-                            cs = sd.rawQuery(GetSQliteQuery, null);
-                            cursor.moveToFirst();
-                            */
-                           // barcodeIn.setText(cursor.getString(0).toString());
-
-                            //atpIn.setText(cursor.getString(1));
-
-                            //storageIn.setText(cursor.getString(2).toString());
-
-                            //SubJect.setText(cursor.getString(3).toString());
-
-                                //barcodeIn.setText(data.getBarcode());
-                                //atpIn.setText(String.valueOf(data.getAtp()));
-                                //storageIn.setText(data.getStorage());
-                            /*
-                            String selectQuery = "SELECT * FROM " + DatabaseHandler.DATABASE_TEMP_TABLE;
-                            Cursor cursor = sd.rawQuery(selectQuery, null);
-                            //Cursor data = sd.rawQuery("SELECT * FROM DATABASE_TEMP_TABLE", null);
-                            barcodeIn.setText(cursor.getString(0).toString());
-                            atpIn.setText(cursor.getString(1));
-                            storageIn.setText(cursor.getString(2).toString());
-                            cursor.moveToFirst();*/
 
                             final AlertDialog dialog = builder.create();
                             dialog.show();
-                            //update button
 
+                            //update button
                             update.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
@@ -237,18 +171,37 @@ public class ScanlistActivity extends AppCompatActivity
                                     bar = barcodeIn.getText().toString();
                                     quan = atpIn.getText().toString();
                                     storage = storageIn.getText().toString();
+                                    data.setBarcode(bar);
+                                    data.setAtp(Integer.parseInt(quan));
+                                    data.setStorage(storage);
 
                                     if(!barcodeIn.getText().toString().isEmpty()  && !atpIn.getText().toString().isEmpty()&& !storageIn.getText().toString().isEmpty()) {
-                                        dbh.update(bar,quan,storage);
+                                        //dbh.update(bar, quan, storage);
+                                        dbh.update(data);
+                                        tableLayout.removeAllViewsInLayout();
+                                        displayTable();
                                         Toast.makeText(ScanlistActivity.this, "Item is updated", Toast.LENGTH_SHORT).show();
-
-
-
+                                        dialog.dismiss();
 
                                     }else {
                                         Toast.makeText(ScanlistActivity.this, "Error", Toast.LENGTH_SHORT).show();
-
                                     }
+                                }
+                            });
+                            delete.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    bar = barcodeIn.getText().toString();
+                                    quan = atpIn.getText().toString();
+                                    storage = storageIn.getText().toString();
+                                    data.setBarcode(bar);
+                                    data.setAtp(Integer.parseInt(quan));
+                                    data.setStorage(storage);
+                                    dbh.delete(data);
+                                    tableLayout.removeAllViewsInLayout();
+                                    displayTable();
+                                    Toast.makeText(ScanlistActivity.this, "Item is deleted", Toast.LENGTH_SHORT).show();
+                                    dialog.dismiss();
 
                                 }
                             });
@@ -256,8 +209,6 @@ public class ScanlistActivity extends AppCompatActivity
                                 @Override
                                 public void onClick(View v) {
                                     dialog.dismiss();
-                                    Intent scanlistActivity = new Intent(ScanlistActivity.this, ScanlistActivity.class);
-                                    startActivity(scanlistActivity);
                                 }
                             });
 
@@ -285,63 +236,19 @@ public class ScanlistActivity extends AppCompatActivity
         String selectQuery = "SELECT  * FROM " + DatabaseHandler.DATABASE_TEMP_TABLE;
         SQLiteDatabase db = dbh.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
-
-        {
-            if (cursor.moveToFirst()) {
-                do {
-                    DataClass contact = new DataClass();
-                    contact.setBarcode(cursor.getString(0));
-                    contact.setAtp(Integer.parseInt(cursor.getString(1)));
-                    contact.setStorage(cursor.getString(2));
-                    contactList.add(contact);
-                }while(cursor.moveToNext());
-            }
-           // cursor.moveToFirst();
-            cursor.close();
+        if (cursor.moveToFirst()) {
+            do {
+                DataClass contact = new DataClass();
+                contact.setBarcode(cursor.getString(0));
+                contact.setAtp(Integer.parseInt(cursor.getString(1)));
+                contact.setStorage(cursor.getString(2));
+                contactList.add(contact);
+            }while(cursor.moveToNext());
         }
-        //System.out.print("-------------------------------------------------------------------------------------------------------------");
+        cursor.close();
         return contactList;
     }
 
-
-    /*
-    private void reload() {
-        //SQLiteDatabase db;// = db.getReadableDatabase();
-       // String selectQuery = "SELECT * FROM " + DatabaseHandler.DATABASE_TEMP_TABLE;
-        //Cursor cursor = sd.rawQuery(selectQuery, null);
-
-        sd = dbh.getReadableDatabase();
-        String selectQuery = "SELECT * FROM " + DatabaseHandler.DATABASE_TEMP_TABLE;
-        final Cursor cs = sd.rawQuery(selectQuery, null);
-        //DatabaseHandler d = new DatabaseHandler(this);
-        //Cursor cs = sd.rawQuery("SELECT * FROM DATABASE_TEMP_TABLE", null);
-        if (cs.moveToFirst()) {
-
-            inventoryList.clear();
-            do {
-                inventoryList.add(new DataClass(
-                        cs.getString(0),
-                        cs.getInt(1),
-                        cs.getString(2)
-                        //cursorEmployees.getString(3),
-                        //cursorEmployees.getDouble(4)
-                ));
-            } while (cs.moveToNext());
-        }
-        //cs.moveToFirst();
-        System.out.println(list);
-
-        // barcodeIn.setText(cursor.getString(0).toString());
-
-        //atpIn.setText(cursor.getString(1));
-
-        //storageIn.setText(cursor.getString(2).toString());
-
-        //SubJect.setText(cursor.getString(3).toString());
-
-        //cursorEmployees.close();
-        //notifyDataSetChanged();
-
-    }*/
-
 }
+
+

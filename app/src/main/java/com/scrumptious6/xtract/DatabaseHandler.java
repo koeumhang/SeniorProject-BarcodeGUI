@@ -85,49 +85,23 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         //else return true;
     }
 
-    public void update(String bar, String quan, String storage)
+    //To update product in the Scanlist Table
+    public int update(DataClass s)
     {
         SQLiteDatabase db = this.getWritableDatabase();
-        String sql = "UPDATE DATABASE_TEMP_TABLE \n" +
-                "SET BARCODE = ?, \n" +
-                "SCANLIST_ITEM_ATP = ?, \n" +
-                "SCANLIST_ITEM_STORAGE_BIN = ? \n" +
-                "WHERE BARCODE = ?;\n";
-        db.execSQL(sql, new String[]{bar, String.valueOf(quan), storage});
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(SCANLIST_ITEM_ATP, s.getAtp());
+        contentValues.put(SCANLIST_ITEM_STORAGE_BIN, s.getStorage());
+        return db.update(DATABASE_TEMP_TABLE,contentValues, "BARCODE=?",new String[]{s.getBarcode()});
     }
-    /*
-    public ArrayList<String> fetch_Edittext() {
-        ArrayList<String> arr_ = new ArrayList<String>();
-        String selectQuery = "Select * FROM " + DATABASE_TEMP_TABLE;
-
+    //To delete product from the Scanlist Table
+    public int delete(DataClass s)
+    {
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
-
-        if (cursor.moveToFirst()) {
-            do {
-                arr_.add(cursor.getString(0));
-
-            } while (cursor.moveToNext());
-        }
-        db.close();
-        return arr_;
+        return db.delete(DATABASE_TEMP_TABLE, "BARCODE=?",new String[]{s.getBarcode()});
     }
 
 
-    public Cursor fetch() {
-        ArrayList<String> arr_ = new ArrayList<String>();
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cs = db.rawQuery("select * from " + DATABASE_TEMP_TABLE,null );
-        if (cs.moveToFirst()) {
-            do {
-                arr_.add(cs.getString(0));
-
-            } while (cs.moveToNext());
-        }
-        db.close();
-        //return arr_;
-        return  cs;
-    }*/
 
 
 
