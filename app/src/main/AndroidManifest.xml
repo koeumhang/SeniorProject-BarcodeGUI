@@ -24,6 +24,7 @@
             android:screenOrientation="portrait" />
 
         <activity
+
             android:name=".MainActivity"
             android:label="Barcode Reader"
             android:screenOrientation="portrait">
