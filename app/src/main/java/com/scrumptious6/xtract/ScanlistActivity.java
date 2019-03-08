@@ -48,7 +48,7 @@ public class ScanlistActivity extends AppCompatActivity
                 final EditText atpIn = view.findViewById(R.id.atp);
                 final EditText storageIn = view.findViewById(R.id.storage);
                 Button add = view.findViewById(R.id.addButton);
-
+                Button can = view.findViewById(R.id.canButton);
                 builder.setView(view);
                 final AlertDialog dialog = builder.create();
                 dialog.show();
@@ -74,6 +74,13 @@ public class ScanlistActivity extends AppCompatActivity
                             Toast.makeText(ScanlistActivity.this, "Error", Toast.LENGTH_SHORT).show();
                         }
 
+                    }
+                });
+                can.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        dialog.dismiss();
                     }
                 });
             }
