@@ -18,6 +18,7 @@ import com.google.zxing.integration.android.IntentResult;
 public class BarcodeActivity extends AppCompatActivity {
     private Button manualButton;
     private Button scanIntentButton;
+    DatabaseHandler db;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,18 +48,40 @@ public class BarcodeActivity extends AppCompatActivity {
             }
         });
     }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if(result != null) {
+            if(result.getContents() == null) {
+                Log.d("MainActivity", "Cancelled scan");
+                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
+            } else {
+                Log.d("MainActivity", "Scanned");
+                Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                ///Add the scanned items in the database///
+                db = new DatabaseHandler(this);
+                db.insertScannedItem(result.getContents());
 
+                Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+            }
+        } else {
+            // This is important, otherwise the result will not be passed to the fragment
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
     protected void showInputDialog() {
         LayoutInflater layoutInflater = LayoutInflater.from(BarcodeActivity.this);
         View promptView = layoutInflater.inflate(com.scrumptious6.xtract.R.layout.input_dialog, null);
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(BarcodeActivity.this);
         alertDialogBuilder.setView(promptView);
+        db = new DatabaseHandler(this);
 
         final EditText editText = promptView.findViewById(com.scrumptious6.xtract.R.id.edittext);
         // setup a dialog window
         alertDialogBuilder.setCancelable(false)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        db.insertScannedItem(editText.getText().toString());
                         // resultText.setText("Hello, " + editText.getText());
                     }
                 })
@@ -74,3 +97,4 @@ public class BarcodeActivity extends AppCompatActivity {
         alert.show();
     }
 }
+
