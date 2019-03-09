@@ -61,7 +61,6 @@ public class ScanlistActivity extends AppCompatActivity
                             bar = barcodeIn.getText().toString();
                             quan = atpIn.getText().toString();
                             storage = storageIn.getText().toString();
-
                             data.setBarcode(bar);
                             data.setAtp(Integer.parseInt(quan));
                             data.setStorage(storage);
@@ -245,11 +244,11 @@ public class ScanlistActivity extends AppCompatActivity
         Cursor cursor = db.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
             do {
-                DataClass contact = new DataClass();
-                contact.setBarcode(cursor.getString(0));
-                contact.setAtp(Integer.parseInt(cursor.getString(1)));
-                contact.setStorage(cursor.getString(2));
-                contactList.add(contact);
+                DataClass data = new DataClass();
+                data.setBarcode(cursor.getString(0));
+                data.setAtp(Integer.parseInt(cursor.getString(1)));
+                data.setStorage(cursor.getString(2));
+                contactList.add(data);
             }while(cursor.moveToNext());
         }
         cursor.close();
