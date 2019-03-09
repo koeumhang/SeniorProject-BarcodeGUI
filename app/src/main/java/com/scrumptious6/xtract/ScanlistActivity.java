@@ -149,7 +149,7 @@ public class ScanlistActivity extends AppCompatActivity
                             AlertDialog.Builder builder = new AlertDialog.Builder(ScanlistActivity.this);
 
                             View view = getLayoutInflater().inflate(R.layout.update_delete,null);
-                            final EditText barcodeIn = view.findViewById(R.id.barcode);
+                            final TextView barcodeIn = view.findViewById(R.id.barcode);
                             final EditText atpIn = view.findViewById(R.id.atp);
                             final EditText storageIn = view.findViewById(R.id.storage);
                             Button update = view.findViewById(R.id.updateButton);
