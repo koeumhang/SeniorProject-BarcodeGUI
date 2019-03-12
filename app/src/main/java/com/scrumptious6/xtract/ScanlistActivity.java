@@ -62,28 +62,23 @@ public class ScanlistActivity extends AppCompatActivity
                             bar = barcodeIn.getText().toString();
                             quan = atpIn.getText().toString();
                             storage = storageIn.getText().toString();
-                            data.setBarcode(bar);
-                            //int num = Integer.parseInt(quan);
-                            try{
-                                int num = Integer.parseInt(quan);
-                                if(num ==(int)num){
-                                    data.setAtp(Integer.parseInt(quan));
-                                }
-                            }catch (Exception e){
-                                Toast.makeText(ScanlistActivity.this, "Error, It's not a number", Toast.LENGTH_SHORT).show();
-
+                            try {
+                                data.setBarcode(bar);
+                                data.setAtp(Integer.parseInt(quan));
+                                data.setStorage(storage);
+                                db.insert(data);
+                                Toast.makeText(ScanlistActivity.this, "Item is added", Toast.LENGTH_SHORT).show();
+                                tableLayout.removeAllViewsInLayout();
+                                displayTable();
+                                dialog.dismiss();
+                            } catch (NumberFormatException e) {
+                                atpIn.setError(quan+ " is not a number");
+                                //Log.i("",quan+" is not a number");
+                                //Toast.makeText(ScanlistActivity.this, quan+" is not a number", Toast.LENGTH_SHORT).show();
                             }
-                            //data.setAtp(Integer.parseInt(quan));
-                            data.setStorage(storage);
-                            db.insert(data);
-                            Toast.makeText(ScanlistActivity.this, "Item is added", Toast.LENGTH_SHORT).show();
-                            tableLayout.removeAllViewsInLayout();
-                            displayTable();
-                            dialog.dismiss();
                         }else{
                             Toast.makeText(ScanlistActivity.this, "Error", Toast.LENGTH_SHORT).show();
                         }
-
                     }
                 });
                 can.setOnClickListener(new View.OnClickListener() {
@@ -185,21 +180,29 @@ public class ScanlistActivity extends AppCompatActivity
                                 @Override
                                 public void onClick(View view) {
 
-                                    bar = barcodeIn.getText().toString();
-                                    quan = atpIn.getText().toString();
-                                    storage = storageIn.getText().toString();
-                                    data.setBarcode(bar);
-                                    data.setAtp(Integer.parseInt(quan));
-                                    data.setStorage(storage);
-
                                     if(!barcodeIn.getText().toString().isEmpty()  && !atpIn.getText().toString().isEmpty()&& !storageIn.getText().toString().isEmpty()) {
                                         //dbh.update(bar, quan, storage);
-                                        dbh.update(data);
-                                        tableLayout.removeAllViewsInLayout();
-                                        displayTable();
-                                        Toast.makeText(ScanlistActivity.this, "Item is updated", Toast.LENGTH_SHORT).show();
-                                        dialog.dismiss();
 
+                                        bar = barcodeIn.getText().toString();
+                                        quan = atpIn.getText().toString();
+                                        storage = storageIn.getText().toString();
+                                        try {
+                                            data.setBarcode(bar);
+                                            data.setAtp(Integer.parseInt(quan));
+                                            data.setStorage(storage);
+                                            dbh.update(data);
+                                            Toast.makeText(ScanlistActivity.this, "Item is added", Toast.LENGTH_SHORT).show();
+                                            tableLayout.removeAllViewsInLayout();
+                                            displayTable();
+                                            Toast.makeText(ScanlistActivity.this, "Item is updated", Toast.LENGTH_SHORT).show();
+                                            dialog.dismiss();
+                                        }
+                                        catch (NumberFormatException e) {
+                                            atpIn.setError(quan+ " is not a number");
+                                            //atpIn.setBackgroundResource(R.drawable.edterr);
+                                            //Log.i("",quan+" is not a number");
+                                            //Toast.makeText(ScanlistActivity.this, quan+" is not a number", Toast.LENGTH_SHORT).show();
+                                        }
                                     }else {
                                         Toast.makeText(ScanlistActivity.this, "Error", Toast.LENGTH_SHORT).show();
                                     }
