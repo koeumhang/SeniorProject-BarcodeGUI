@@ -43,6 +43,7 @@ public class BarcodeActivity extends AppCompatActivity {
                 integrator.setPrompt("Scan");
                 integrator.setCameraId(0);
                 integrator.setBeepEnabled(true);
+                integrator.setOrientationLocked(true);
                 integrator.setBarcodeImageEnabled(false);
                 integrator.initiateScan();
             }

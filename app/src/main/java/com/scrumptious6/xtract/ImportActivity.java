@@ -1,48 +1,52 @@
 package com.scrumptious6.xtract;
 
 import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+
 
 /*
     This class handles the import screen. The import activity allows a user to access
     a csv file and upload to the database.
  */
 public class ImportActivity extends AppCompatActivity {
-    DatabaseHandler db;
-    private int mProgress = 0;
+    DatabaseHandler dbHandler;
+    SQLiteDatabase db;
     private static final int READ_REQUEST_CODE = 42;
-    MyTask myTask;
+    String[] colNames;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_import);
 
-        db = new DatabaseHandler(this);
+        colNames = new String[] {"MATERIAL_NUM", "MATERIAL_PLANT", "STORAGE_BIN", "MATERIAL_ATP", "SAFETY_STOCK"};
+        dbHandler = new DatabaseHandler(this);
+        db = dbHandler.getReadableDatabase();
+
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setMessage("Warning this will overwrite previous database!");
         alertDialogBuilder.setPositiveButton("Continue",
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
-                        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                        intent.addCategory(Intent.CATEGORY_OPENABLE);
-                        intent.setType("*/*");
-                        startActivityForResult(intent, READ_REQUEST_CODE);
+                        dbHandler.clearDatabase();
+                        getFile();
                     }
                 });
         alertDialogBuilder.setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
@@ -51,57 +55,53 @@ public class ImportActivity extends AppCompatActivity {
                 finish();
             }
         });
+        alertDialogBuilder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                finish();
+            }
+        });
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
+    }
+
+    public void getFile(){
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("*/*");
+        startActivityForResult(intent, READ_REQUEST_CODE);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        StringBuilder stringBuilder = new StringBuilder();
-        String line= "";
-        stringBuilder.append(line);
-        String str1 = "INSERT INTO Inventory_Table values('";
         Uri uri = data.getData();
-
         if(uri != null){
             try {
                 InputStream inputStream = getContentResolver().openInputStream(uri);
                 BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-                line = reader.readLine();
-                db.clearDatabase();
+
+                String line = reader.readLine();
+
+                db.beginTransaction();
                 while ((line = reader.readLine()) != null) {
-                    stringBuilder.setLength(0);
                     String[] tokens = line.split(",");
-                    stringBuilder.append(str1 + tokens[0] + "','" + tokens[1] + "','" +
-                            tokens[2] + "','" + tokens[3] + "','" + tokens[4] + "');");
-                    db.importDatabase(stringBuilder);
+                    ContentValues cv = new ContentValues(5);
+                    cv.put(colNames[0], tokens[0].trim());
+                    cv.put(colNames[1], tokens[1].trim());
+                    cv.put(colNames[2], tokens[2].trim());
+                    cv.put(colNames[3], tokens[3].trim());
+                    cv.put(colNames[4], tokens[4].trim());
+                    db.insert("Inventory_Table", null, cv);
                 }
                 inputStream.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+        db.setTransactionSuccessful();
+        db.endTransaction();
         finish();
-    }
-
-    class MyTask extends AsyncTask<String, String, String>{
-
-        @Override
-        protected String doInBackground(String... strings) {
-            //TODO: Implement an Async task to display progress
-            int bytes = 0;
-            while(bytes <= 100){
-
-            }
-            return null;
-        }
-
-        @Override
-        protected void onProgressUpdate(String... values) {
-            super.onProgressUpdate(values);
-
-        }
     }
 }

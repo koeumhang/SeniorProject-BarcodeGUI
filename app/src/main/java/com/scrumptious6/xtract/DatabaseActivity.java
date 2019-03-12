@@ -92,6 +92,7 @@ public class DatabaseActivity extends AppCompatActivity {
                 }
 
             }
+            cursor.close();
             db.setTransactionSuccessful();
         } catch (SQLiteException e) {
             e.printStackTrace();

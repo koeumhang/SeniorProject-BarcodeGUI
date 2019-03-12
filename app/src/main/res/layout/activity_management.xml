@@ -8,15 +8,12 @@
     tools:context=".ManagementActivity">
 
     <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="408dp"
+        android:id="@+id/logo"
+        android:layout_width="0dp"
         android:layout_height="156dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:scaleType="fitEnd"
-        app:layout_constraintBottom_toTopOf="@+id/scanButton"
+        android:scaleType="fitXY"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.538"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.261"
