@@ -25,7 +25,8 @@ public class ScanlistActivity extends AppCompatActivity
     DatabaseHandler dbh;
     private ImageButton addB;
     DatabaseHandler db;
-    String bar, quan, storage;
+    String bar,quan, storage;
+    //int quan;
     TableLayout tableLayout;
     DataClass data = new DataClass();
 
@@ -62,7 +63,17 @@ public class ScanlistActivity extends AppCompatActivity
                             quan = atpIn.getText().toString();
                             storage = storageIn.getText().toString();
                             data.setBarcode(bar);
-                            data.setAtp(Integer.parseInt(quan));
+                            //int num = Integer.parseInt(quan);
+                            try{
+                                int num = Integer.parseInt(quan);
+                                if(num ==(int)num){
+                                    data.setAtp(Integer.parseInt(quan));
+                                }
+                            }catch (Exception e){
+                                Toast.makeText(ScanlistActivity.this, "Error, It's not a number", Toast.LENGTH_SHORT).show();
+
+                            }
+                            //data.setAtp(Integer.parseInt(quan));
                             data.setStorage(storage);
                             db.insert(data);
                             Toast.makeText(ScanlistActivity.this, "Item is added", Toast.LENGTH_SHORT).show();

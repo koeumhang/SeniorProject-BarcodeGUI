@@ -1,25 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background"
-    android:orientation="vertical">
+    tools:context=".ExportActivity">
 
-    <!--
-    <com.journeyapps.barcodescanner.CompoundBarcodeView
-        android:id="@+id/barcode_scanner"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="0dp"
+    <Button
+        android:id="@+id/emailButton"
+        android:layout_width="220dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="236dp"
+        android:text="EMAIL"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        android:textStyle="bold"
         android:visibility="visible"
-        app:zxing_preview_scaling_strategy="centerCrop"
-        app:zxing_use_texture_view="false"
-        tools:context=".BarcodeActivity">
-    </com.journeyapps.barcodescanner.CompoundBarcodeView>
--->
-
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="408dp"
@@ -36,39 +38,24 @@
         app:srcCompat="@drawable/logo" />
 
     <Button
-        android:id="@+id/emailButton"
-        android:layout_width="220dp"
-        android:layout_height="80dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="236dp"
-        android:text="Manual"
-        android:textAlignment="center"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/scanIntentButton"
+        android:id="@+id/exButton"
         android:layout_width="220dp"
         android:layout_height="80dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:text="Scan"
+        android:text="Convert to CVS FILES"
         android:textAlignment="center"
         android:textSize="24sp"
         android:textStyle="bold"
         android:visibility="visible"
+
         app:layout_constraintBottom_toTopOf="@+id/emailButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.765" />
 
 </android.support.constraint.ConstraintLayout>
