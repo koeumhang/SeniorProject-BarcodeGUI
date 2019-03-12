@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -29,13 +30,14 @@ public class ImportActivity extends AppCompatActivity {
     SQLiteDatabase db;
     private static final int READ_REQUEST_CODE = 42;
     String[] colNames;
+    private int exitCode = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_import);
 
-        colNames = new String[] {"MATERIAL_NUM", "MATERIAL_PLANT", "STORAGE_BIN", "MATERIAL_ATP", "SAFETY_STOCK"};
+        colNames = new String[]{"MATERIAL_NUM", "MATERIAL_PLANT", "STORAGE_BIN", "MATERIAL_ATP", "SAFETY_STOCK"};
         dbHandler = new DatabaseHandler(this);
         db = dbHandler.getReadableDatabase();
 
@@ -49,9 +51,10 @@ public class ImportActivity extends AppCompatActivity {
                         getFile();
                     }
                 });
-        alertDialogBuilder.setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
+        alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(getApplicationContext(), "Canceled!", Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
@@ -65,7 +68,16 @@ public class ImportActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-    public void getFile(){
+    @Override
+    public void onResume(){
+        super.onResume();
+        if(exitCode == -1) {
+            Toast.makeText(this, "Error! No file was selected.", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+    }
+
+    public void getFile() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("*/*");
@@ -76,32 +88,39 @@ public class ImportActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        //Checks if the file has any data. If data is null then returns back to application control
+        //and sets the flag to end activity with error.
+        if (data == null) {
+            exitCode = -1;
+            return;
+        }
+
         Uri uri = data.getData();
-        if(uri != null){
-            try {
-                InputStream inputStream = getContentResolver().openInputStream(uri);
-                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 
-                String line = reader.readLine();
+        try {
+            InputStream inputStream = getContentResolver().openInputStream(uri);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 
-                db.beginTransaction();
-                while ((line = reader.readLine()) != null) {
-                    String[] tokens = line.split(",");
-                    ContentValues cv = new ContentValues(5);
-                    cv.put(colNames[0], tokens[0].trim());
-                    cv.put(colNames[1], tokens[1].trim());
-                    cv.put(colNames[2], tokens[2].trim());
-                    cv.put(colNames[3], tokens[3].trim());
-                    cv.put(colNames[4], tokens[4].trim());
-                    db.insert("Inventory_Table", null, cv);
-                }
-                inputStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
+            String line = reader.readLine();
+
+            db.beginTransaction();
+            while ((line = reader.readLine()) != null) {
+                String[] tokens = line.split(",");
+                ContentValues cv = new ContentValues(5);
+                cv.put(colNames[0], tokens[0].trim());
+                cv.put(colNames[1], tokens[1].trim());
+                cv.put(colNames[2], tokens[2].trim());
+                cv.put(colNames[3], tokens[3].trim());
+                cv.put(colNames[4], tokens[4].trim());
+                db.insert("Inventory_Table", null, cv);
             }
+            inputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         db.setTransactionSuccessful();
         db.endTransaction();
+        Toast.makeText(this, "Sucess! Database was imported.", Toast.LENGTH_SHORT).show();
         finish();
     }
 }
