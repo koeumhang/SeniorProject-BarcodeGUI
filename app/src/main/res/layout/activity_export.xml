@@ -45,7 +45,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:text="Convert to CVS FILES"
+        android:text="Convert to CSV FILE"
         android:textAlignment="center"
         android:textSize="24sp"
         android:textStyle="bold"
