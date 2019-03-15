@@ -122,6 +122,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             e.printStackTrace();
         }
         return true;
+        ///////
     }
 }
 
