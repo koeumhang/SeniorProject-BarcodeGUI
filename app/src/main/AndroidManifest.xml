@@ -22,6 +22,9 @@
         <activity
             android:name=".BarcodeActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".email"
+            android:screenOrientation="portrait" />
 
         <activity
 
@@ -33,6 +36,8 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+
         </activity>
     </application>
 
