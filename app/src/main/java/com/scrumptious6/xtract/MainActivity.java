@@ -56,12 +56,11 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(importActivity);
             }
         });
-
         exportButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent email = new Intent(MainActivity.this, email.class);
-                startActivity(email);
+                Intent intent = new Intent(MainActivity.this, ExportActivity.class);
+                startActivity(intent);
             }
         });
     }

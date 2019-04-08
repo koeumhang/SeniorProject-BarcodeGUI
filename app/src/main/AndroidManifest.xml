@@ -3,6 +3,8 @@
     package="com.scrumptious6.xtract">
 
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -11,7 +13,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar.Fullscreen">
-        <activity android:name=".ImportActivity"></activity>
+        <activity android:name=".EmailActivity"></activity>
+        <activity android:name=".CSVFilePage" />
+        <activity android:name=".ExportActivity" />
+        <activity android:name=".ImportActivity" />
         <activity android:name=".DatabaseActivity" />
         <activity
             android:name=".ScanlistActivity"
@@ -23,11 +28,6 @@
             android:name=".BarcodeActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".email"
-            android:screenOrientation="portrait" />
-
-        <activity
-
             android:name=".MainActivity"
             android:label="Barcode Reader"
             android:screenOrientation="portrait">
@@ -36,8 +36,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
-
         </activity>
     </application>
 

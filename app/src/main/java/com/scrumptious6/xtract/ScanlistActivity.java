@@ -7,8 +7,6 @@ import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -18,21 +16,17 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.support.v7.widget.SearchView;
-
-
-import android.util.Log;
-import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
-public class ScanlistActivity extends AppCompatActivity {
+public class ScanlistActivity extends AppCompatActivity
+{
     DatabaseHandler dbh;
     private ImageButton addB;
     DatabaseHandler db;
-    String bar, quan, storage;
+    String bar,quan, storage;
+    //int quan;
     TableLayout tableLayout;
     DataClass data = new DataClass();
 
@@ -50,12 +44,12 @@ public class ScanlistActivity extends AppCompatActivity {
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(ScanlistActivity.this);
 
-                View view = getLayoutInflater().inflate(R.layout.activity_add_data, null);
+                View view = getLayoutInflater().inflate(R.layout.activity_add_data,null);
                 final EditText barcodeIn = view.findViewById(R.id.barcode);
                 final EditText atpIn = view.findViewById(R.id.atp);
                 final EditText storageIn = view.findViewById(R.id.storage);
                 Button add = view.findViewById(R.id.addButton);
-
+                Button can = view.findViewById(R.id.canButton);
                 builder.setView(view);
                 final AlertDialog dialog = builder.create();
                 dialog.show();
@@ -64,30 +58,41 @@ public class ScanlistActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
 
-                        if (!barcodeIn.getText().toString().isEmpty() && !atpIn.getText().toString().isEmpty() && !storageIn.getText().toString().isEmpty()) {
+                        if(!barcodeIn.getText().toString().isEmpty()  && !atpIn.getText().toString().isEmpty()&& !storageIn.getText().toString().isEmpty()){
                             bar = barcodeIn.getText().toString();
                             quan = atpIn.getText().toString();
                             storage = storageIn.getText().toString();
-
-                            data.setBarcode(bar);
-                            data.setAtp(Integer.parseInt(quan));
-                            data.setStorage(storage);
-                            db.insert(data);
-                            Toast.makeText(ScanlistActivity.this, "Item is added", Toast.LENGTH_SHORT).show();
-                            tableLayout.removeAllViewsInLayout();
-                            displayTable();
-                            dialog.dismiss();
-                        } else {
+                            try {
+                                data.setBarcode(bar);
+                                data.setAtp(Integer.parseInt(quan));
+                                data.setStorage(storage);
+                                db.insert(data);
+                                Toast.makeText(ScanlistActivity.this, "Item is added", Toast.LENGTH_SHORT).show();
+                                tableLayout.removeAllViewsInLayout();
+                                displayTable();
+                                dialog.dismiss();
+                            } catch (NumberFormatException e) {
+                                atpIn.setError(quan+ " is not a number");
+                                //Log.i("",quan+" is not a number");
+                                //Toast.makeText(ScanlistActivity.this, quan+" is not a number", Toast.LENGTH_SHORT).show();
+                            }
+                        }else{
                             Toast.makeText(ScanlistActivity.this, "Error", Toast.LENGTH_SHORT).show();
                         }
+                    }
+                });
+                can.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
+                        dialog.dismiss();
                     }
                 });
             }
         });
     }
-
-    public void displayTable() {
+    public void displayTable()
+    {
         // Add header row
         tableLayout = (TableLayout) findViewById(R.id.tablelayout);
         TableRow rowHeader = new TableRow(this);
@@ -143,15 +148,14 @@ public class ScanlistActivity extends AppCompatActivity {
 
                     row.setOnClickListener(new View.OnClickListener() {
                         int index = 0;
-
                         @Override
                         public void onClick(View v) {
                             Toast.makeText(ScanlistActivity.this, "Click item ", Toast.LENGTH_SHORT).show();
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                             AlertDialog.Builder builder = new AlertDialog.Builder(ScanlistActivity.this);
 
-                            View view = getLayoutInflater().inflate(R.layout.update_delete, null);
-                            final EditText barcodeIn = view.findViewById(R.id.barcode);
+                            View view = getLayoutInflater().inflate(R.layout.update_delete,null);
+                            final TextView barcodeIn = view.findViewById(R.id.barcode);
                             final EditText atpIn = view.findViewById(R.id.atp);
                             final EditText storageIn = view.findViewById(R.id.storage);
                             Button update = view.findViewById(R.id.updateButton);
@@ -176,22 +180,30 @@ public class ScanlistActivity extends AppCompatActivity {
                                 @Override
                                 public void onClick(View view) {
 
-                                    bar = barcodeIn.getText().toString();
-                                    quan = atpIn.getText().toString();
-                                    storage = storageIn.getText().toString();
-                                    data.setBarcode(bar);
-                                    data.setAtp(Integer.parseInt(quan));
-                                    data.setStorage(storage);
-
-                                    if (!barcodeIn.getText().toString().isEmpty() && !atpIn.getText().toString().isEmpty() && !storageIn.getText().toString().isEmpty()) {
+                                    if(!barcodeIn.getText().toString().isEmpty()  && !atpIn.getText().toString().isEmpty()&& !storageIn.getText().toString().isEmpty()) {
                                         //dbh.update(bar, quan, storage);
-                                        dbh.update(data);
-                                        tableLayout.removeAllViewsInLayout();
-                                        displayTable();
-                                        Toast.makeText(ScanlistActivity.this, "Item is updated", Toast.LENGTH_SHORT).show();
-                                        dialog.dismiss();
 
-                                    } else {
+                                        bar = barcodeIn.getText().toString();
+                                        quan = atpIn.getText().toString();
+                                        storage = storageIn.getText().toString();
+                                        try {
+                                            data.setBarcode(bar);
+                                            data.setAtp(Integer.parseInt(quan));
+                                            data.setStorage(storage);
+                                            dbh.update(data);
+                                            Toast.makeText(ScanlistActivity.this, "Item is added", Toast.LENGTH_SHORT).show();
+                                            tableLayout.removeAllViewsInLayout();
+                                            displayTable();
+                                            Toast.makeText(ScanlistActivity.this, "Item is updated", Toast.LENGTH_SHORT).show();
+                                            dialog.dismiss();
+                                        }
+                                        catch (NumberFormatException e) {
+                                            atpIn.setError(quan+ " is not a number");
+                                            //atpIn.setBackgroundResource(R.drawable.edterr);
+                                            //Log.i("",quan+" is not a number");
+                                            //Toast.makeText(ScanlistActivity.this, quan+" is not a number", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }else {
                                         Toast.makeText(ScanlistActivity.this, "Error", Toast.LENGTH_SHORT).show();
                                     }
                                 }
@@ -238,7 +250,6 @@ public class ScanlistActivity extends AppCompatActivity {
             // Close database
         }
     }
-
     public List<DataClass> getAllContacts() {
         List<DataClass> contactList = new ArrayList<DataClass>();
         // Select All Query
@@ -247,14 +258,16 @@ public class ScanlistActivity extends AppCompatActivity {
         Cursor cursor = db.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
             do {
-                DataClass contact = new DataClass();
-                contact.setBarcode(cursor.getString(0));
-                contact.setAtp(Integer.parseInt(cursor.getString(1)));
-                contact.setStorage(cursor.getString(2));
-                contactList.add(contact);
-            } while (cursor.moveToNext());
+                DataClass data = new DataClass();
+                data.setBarcode(cursor.getString(0));
+                data.setAtp(Integer.parseInt(cursor.getString(1)));
+                data.setStorage(cursor.getString(2));
+                contactList.add(data);
+            }while(cursor.moveToNext());
         }
         cursor.close();
         return contactList;
     }
 }
+
+

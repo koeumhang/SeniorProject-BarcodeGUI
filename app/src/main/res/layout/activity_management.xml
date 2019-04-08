@@ -7,6 +7,20 @@
     android:background="@drawable/background"
     tools:context=".ManagementActivity">
 
+    <Button
+        android:id="@+id/clearScanlist"
+        android:layout_width="281dp"
+        android:layout_height="117dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="60dp"
+        android:text="Clear Scanlist"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/databaseButton" />
+
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="408dp"
@@ -28,11 +42,10 @@
         android:layout_height="117dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="144dp"
+        android:layout_marginBottom="232dp"
         android:text="Database"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
@@ -46,8 +59,8 @@
         android:text="Scanlist"
         app:layout_constraintBottom_toTopOf="@+id/databaseButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.505"
+        app:layout_constraintHorizontal_bias="0.508"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.519" />
 </android.support.constraint.ConstraintLayout>
