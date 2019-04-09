@@ -44,9 +44,9 @@ public class DataClass {
     }
 
     //public void printDatabase(){
-        //String dbString = dbHandler.databaseToString();
-        //myText.setText(dbString);
-        //myInput.setText("");
+    //String dbString = dbHandler.databaseToString();
+    //myText.setText(dbString);
+    //myInput.setText("");
 
 
 }
