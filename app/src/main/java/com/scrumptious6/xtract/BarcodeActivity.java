@@ -24,7 +24,7 @@ public class BarcodeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_barcode);
 
-        manualButton = this.findViewById(R.id.manualButton);
+        manualButton = this.findViewById(R.id.emailButton);
         scanIntentButton = this.findViewById(R.id.scanIntentButton);
 
         manualButton.setOnClickListener(new View.OnClickListener() {
