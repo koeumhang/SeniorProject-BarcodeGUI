@@ -113,6 +113,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.delete(DATABASE_TABLE, null, null);
     }
 
+    public void clearScanlist(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        db.delete(DATABASE_TEMP_TABLE, null, null);
+        //db.execSQL("DROP TABLE IF EXISTS DATABASE_TEMP_TABLE");
+    }
+
     public boolean importDatabase(StringBuilder statement) throws IOException {
         SQLiteDatabase db = this.getReadableDatabase();
         try {
