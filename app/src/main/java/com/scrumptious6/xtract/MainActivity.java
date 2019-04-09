@@ -15,6 +15,7 @@ import com.google.zxing.integration.android.IntentResult;
 /*
     This class defines the main screen of the application.
  */
+//
 public class MainActivity extends AppCompatActivity {
 
     DatabaseHandler db;

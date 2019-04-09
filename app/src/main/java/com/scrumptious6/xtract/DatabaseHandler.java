@@ -5,14 +5,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.net.Uri;
+import android.widget.EditText;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
+import java.util.ArrayList;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
@@ -28,45 +24,77 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String SAFETY_STOCK = "SAFETY_STOCK";
 
     //Column for Scanlist Table
-    //private static final String ID = "ID";
     private static final String BARCODE = "BARCODE";
     private static final String SCANLIST_ITEM_ATP = "SCANLIST_ITEM_ATP";
-    private SQLiteDatabase dbh;
+    private static final String SCANLIST_ITEM_STORAGE_BIN = "SCANLIST_ITEM_STORAGE_BIN";
 
     public DatabaseHandler(Context context) {
+
         super(context, DATABASE_NAME, null, 1);
     }
+
     @Override
     public void onCreate(SQLiteDatabase db)
     {
-        ///The Scanlist table is created in the inventory database.
         String CREATE_SCANLIST_TABLE = "CREATE TABLE " + DATABASE_TEMP_TABLE + "("
-                + BARCODE + " TEXT PRIMARY KEY," + SCANLIST_ITEM_ATP + " INTEGER" + ")";
+                + BARCODE + " TEXT PRIMARY KEY,"
+                + SCANLIST_ITEM_ATP + " INTEGER,"
+                + SCANLIST_ITEM_STORAGE_BIN + " TEXT"
+                + ")";
         db.execSQL(CREATE_SCANLIST_TABLE);
 
-        ///The Inventory table is created in the inventory database
         String CREATE_ITEMS_TABLE = "CREATE TABLE " + DATABASE_TABLE + "("
-                + MATERIAL_NUM + " VARCHAR(25)," + MATERIAL_PLANT + " VARCHAR(25),"
-                + STORAGE_BIN + " VARCHAR(25)," + MATERIAL_ATP + " INTEGER,"
+                + MATERIAL_NUM + " TEXT PRIMARY KEY," + MATERIAL_PLANT + " TEXT,"
+                + STORAGE_BIN + " TEXT," + MATERIAL_ATP + " INTEGER,"
                 + SAFETY_STOCK + " INTEGER"
                 + ")";
         db.execSQL(CREATE_ITEMS_TABLE);
+        db.execSQL("INSERT INTO " + DATABASE_TABLE+ "(MATERIAL_NUM,MATERIAL_PLANT,STORAGE_BIN,MATERIAL_ATP,SAFETY_STOCK) " +
+                "VALUES ('517','S095',null,1,0)");
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
     {
-        //db.execSQL("DROP TABLE IF EXISTS "+ DATABASE_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS "+ DATABASE_TABLE);
         db.execSQL("DROP TABLE IF EXISTS "+ DATABASE_TEMP_TABLE);
         onCreate(db);
     }
-    //To insert Scanned Items into the table///
+    //To insert Scanned Items into the table
     public boolean insertScannedItem(String name){
         SQLiteDatabase idb = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(BARCODE, name);
+        String value = "0";
+        contentValues.put(SCANLIST_ITEM_ATP,value);
+        contentValues.put(SCANLIST_ITEM_STORAGE_BIN,value);
         long result = idb.insert(DATABASE_TEMP_TABLE, null, contentValues);
-        //long result = idb.insertWithOnConflict(DATABASE_TEMP_TABLE, null, contentValues, SQLiteDatabase.CONFLICT_IGNORE);
         return result != -1; //if result = -1 data absent insert
+    }
+
+    //To insert from the Scanlist screen
+    public void insert(DataClass s){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(BARCODE, s.getBarcode());
+        contentValues.put(SCANLIST_ITEM_ATP, s.getAtp());
+        contentValues.put(SCANLIST_ITEM_STORAGE_BIN, s.getStorage());
+        db.insert(DATABASE_TEMP_TABLE,null,contentValues);
+        db.close();
+    }
+    //To update product in the Scanlist Table
+    public int update(DataClass s)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(SCANLIST_ITEM_ATP, s.getAtp());
+        contentValues.put(SCANLIST_ITEM_STORAGE_BIN, s.getStorage());
+        return db.update(DATABASE_TEMP_TABLE,contentValues, "BARCODE=?",new String[]{s.getBarcode()});
+    }
+    //To delete product from the Scanlist Table
+    public int delete(DataClass s)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete(DATABASE_TEMP_TABLE, "BARCODE=?",new String[]{s.getBarcode()});
     }
 
     public void clearDatabase(){
@@ -85,3 +113,4 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return true;
     }
 }
+
