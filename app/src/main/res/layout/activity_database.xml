@@ -8,35 +8,20 @@
     android:gravity="center_horizontal"
     tools:context=".DatabaseActivity">
 
-    <ListView
-        android:id="@+id/users_list"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.206"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2"
-        tools:ignore="MissingConstraints" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="0dp"
+    <ScrollView
+        android:id="@+id/scroll"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:text="Database"
-        android:textAppearance="@style/TextAppearance.AppCompat.Button"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/users_list"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.023"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        tools:ignore="MissingConstraints">
+        <TableLayout
+            android:id= "@+id/tablelayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:stretchColumns="*"
+            ></TableLayout>
+    </ScrollView>
+
+
+
 
 </android.support.constraint.ConstraintLayout>

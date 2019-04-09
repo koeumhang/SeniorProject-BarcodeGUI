@@ -17,6 +17,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+/*
+    This class handles the import screen. The import activity allows a user to access
+    a csv file and upload to the database.
+ */
 public class ImportActivity extends AppCompatActivity {
     DatabaseHandler db;
     private int mProgress = 0;
