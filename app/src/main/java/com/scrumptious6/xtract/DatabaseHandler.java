@@ -27,6 +27,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String BARCODE = "BARCODE";
     private static final String SCANLIST_ITEM_ATP = "SCANLIST_ITEM_ATP";
     private static final String SCANLIST_ITEM_STORAGE_BIN = "SCANLIST_ITEM_STORAGE_BIN";
+    private static final String SCANLIST_ITEM_PLANT = "SCANLIST_ITEM_PLANT";
+    private static final String SCANLIST_SAFETY_STOCK = "SCANLIST_SAFETY_STOCK";
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, 1);
@@ -38,18 +40,20 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         String CREATE_SCANLIST_TABLE = "CREATE TABLE " + DATABASE_TEMP_TABLE + "("
                 + BARCODE + " TEXT PRIMARY KEY,"
                 + SCANLIST_ITEM_ATP + " INTEGER,"
-                + SCANLIST_ITEM_STORAGE_BIN + " TEXT"
+                + SCANLIST_ITEM_STORAGE_BIN + " TEXT,"
+                + SCANLIST_ITEM_PLANT + " TEXT,"
+                + SCANLIST_SAFETY_STOCK + " TEXT"
                 + ")";
         db.execSQL(CREATE_SCANLIST_TABLE);
 
         String CREATE_ITEMS_TABLE = "CREATE TABLE " + DATABASE_TABLE + "("
-                + MATERIAL_NUM + " TEXT PRIMARY KEY," + MATERIAL_PLANT + " TEXT,"
-                + STORAGE_BIN + " TEXT," + MATERIAL_ATP + " INTEGER,"
+                + MATERIAL_NUM + " TEXT PRIMARY KEY,"
+                + MATERIAL_PLANT + " TEXT,"
+                + STORAGE_BIN + " TEXT,"
+                + MATERIAL_ATP + " INTEGER,"
                 + SAFETY_STOCK + " INTEGER"
                 + ")";
         db.execSQL(CREATE_ITEMS_TABLE);
-        db.execSQL("INSERT INTO " + DATABASE_TABLE+ "(MATERIAL_NUM,MATERIAL_PLANT,STORAGE_BIN,MATERIAL_ATP,SAFETY_STOCK) " +
-                "VALUES ('517','S095',null,1,0)");
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
@@ -65,8 +69,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(BARCODE, name);
         String value = "0";
-        contentValues.put(SCANLIST_ITEM_ATP,value);
-        contentValues.put(SCANLIST_ITEM_STORAGE_BIN,value);
+        String plant = "S095";
+        contentValues.put(SCANLIST_ITEM_ATP, value);
+        contentValues.put(SCANLIST_ITEM_STORAGE_BIN, value);
+        contentValues.put(SCANLIST_ITEM_PLANT,plant);
+        contentValues.put(SCANLIST_SAFETY_STOCK,value);
         long result = idb.insert(DATABASE_TEMP_TABLE, null, contentValues);
         return result != -1; //if result = -1 data absent insert
     }
@@ -75,9 +82,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void insert(DataClass s){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
+        String plant = "S095";
+        String value = "0";
         contentValues.put(BARCODE, s.getBarcode());
         contentValues.put(SCANLIST_ITEM_ATP, s.getAtp());
         contentValues.put(SCANLIST_ITEM_STORAGE_BIN, s.getStorage());
+        contentValues.put(SCANLIST_ITEM_PLANT, plant);
+        contentValues.put(SCANLIST_SAFETY_STOCK, value);
         db.insert(DATABASE_TEMP_TABLE,null,contentValues);
         db.close();
     }
@@ -111,6 +122,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             e.printStackTrace();
         }
         return true;
+        ///////
     }
 }
+
 

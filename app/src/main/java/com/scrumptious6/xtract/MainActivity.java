@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton scanButton;
     private ImageButton manageButton;
     private ImageButton importButton;
+    private ImageButton exportButton;
 
     ///Define of all buttons from the home page///
     @Override
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
         scanButton = (ImageButton) findViewById(R.id.scanButton);
         manageButton = (ImageButton) findViewById(R.id.manageButton);
         importButton = (ImageButton) findViewById(R.id.importButton);
+        exportButton = (ImageButton) findViewById(R.id.exportButton);
 
         scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,6 +54,13 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent importActivity = new Intent(MainActivity.this, ImportActivity.class);
                 startActivity(importActivity);
+            }
+        });
+        exportButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ExportActivity.class);
+                startActivity(intent);
             }
         });
     }

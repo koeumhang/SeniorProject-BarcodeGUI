@@ -83,12 +83,13 @@ public class DatabaseActivity extends AppCompatActivity {
                         tv.setText(text);
                         row.addView(tv);
                     }
+                    /*
                     row.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             Toast.makeText(DatabaseActivity.this, "Click item ", Toast.LENGTH_SHORT).show();
                         }
-                    });
+                    });*/
                     tableLayout.addView(row);
                 }
 
