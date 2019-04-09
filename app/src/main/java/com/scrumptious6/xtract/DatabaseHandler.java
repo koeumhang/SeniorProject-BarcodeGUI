@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "Inventory.db";
+    private static final String DATABASE_NAME = "Inventory.dbHandler";
     public static final String DATABASE_TABLE = "Inventory_Table";
     public static final String DATABASE_TEMP_TABLE = "Scanlist_Table";
 
@@ -31,7 +31,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String SCANLIST_SAFETY_STOCK = "SCANLIST_SAFETY_STOCK";
 
     public DatabaseHandler(Context context) {
-
         super(context, DATABASE_NAME, null, 1);
     }
 
@@ -63,6 +62,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS "+ DATABASE_TEMP_TABLE);
         onCreate(db);
     }
+
     //To insert Scanned Items into the table
     public boolean insertScannedItem(String name){
         SQLiteDatabase idb = this.getWritableDatabase();

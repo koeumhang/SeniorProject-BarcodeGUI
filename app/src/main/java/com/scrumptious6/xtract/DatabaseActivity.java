@@ -26,16 +26,17 @@ public class DatabaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_database);
         dbh = new DatabaseHandler(this);
-        dbh = new DatabaseHandler(this);
         setContentView(R.layout.activity_database);
 
         TableLayout tableLayout = (TableLayout) findViewById(R.id.tablelayout);
-        // Add header row
+
+        // Defines the Table Headers
         TableRow rowHeader = new TableRow(this);
         rowHeader.setBackgroundColor(Color.parseColor("#c0c0c0"));
         rowHeader.setLayoutParams(new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT,
                 TableLayout.LayoutParams.WRAP_CONTENT));
         String[] headerText = {"Material No", "Plant", "Storage Bin", "ATP", "Safety Stock"};
+
         for (String c : headerText) {
             TextView tv = new TextView(this);
             tv.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
@@ -54,7 +55,7 @@ public class DatabaseActivity extends AppCompatActivity {
         // Start the transaction.
         db.beginTransaction();
         try {
-            String selectQuery = "SELECT * FROM " + DatabaseHandler.DATABASE_TABLE;
+            String selectQuery = "SELECT * FROM " + DatabaseHandler.DATABASE_TABLE + " LIMIT 150";
             Cursor cursor = db.rawQuery(selectQuery, null);
             if (cursor.getCount() > 0) {
                 while (cursor.moveToNext()) {
@@ -93,6 +94,7 @@ public class DatabaseActivity extends AppCompatActivity {
                 }
 
             }
+            cursor.close();
             db.setTransactionSuccessful();
         } catch (SQLiteException e) {
             e.printStackTrace();
