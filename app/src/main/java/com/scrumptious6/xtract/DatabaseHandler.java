@@ -113,7 +113,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.delete(DATABASE_TABLE, null, null);
     }
 
-    ////
+    /////
     public void clearScanlist(){
         SQLiteDatabase db = this.getReadableDatabase();
         db.delete(DATABASE_TEMP_TABLE, null, null);
