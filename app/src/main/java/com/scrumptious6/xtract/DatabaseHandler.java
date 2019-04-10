@@ -64,16 +64,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
     //To insert Scanned Items into the table
-    public boolean insertScannedItem(String barcode){
+    public boolean insertScannedItem(String barcode, String atp, String bin, String plant, String stock){
         SQLiteDatabase idb = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        String value = "0";
-        String plant = "S095";
         contentValues.put(BARCODE, barcode);
-        contentValues.put(SCANLIST_ITEM_ATP, value);
-        contentValues.put(SCANLIST_ITEM_STORAGE_BIN, value);
+        contentValues.put(SCANLIST_ITEM_ATP, atp);
+        contentValues.put(SCANLIST_ITEM_STORAGE_BIN, bin);
         contentValues.put(SCANLIST_ITEM_PLANT, plant);
-        contentValues.put(SCANLIST_SAFETY_STOCK, value);
+        contentValues.put(SCANLIST_SAFETY_STOCK, stock);
         long result = idb.insert(DATABASE_TEMP_TABLE, null, contentValues);
         return result != -1; //if result = -1 data absent insert
     }
