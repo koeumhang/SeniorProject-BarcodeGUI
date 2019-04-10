@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -10,25 +9,17 @@
     android:orientation="vertical"
     tools:context=".ScanlistActivity">
 
-
-
-
     <ScrollView
         android:id="@+id/scroll"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp">
-
+        tools:ignore="MissingConstraints">
 
         <TableLayout
             android:id="@+id/tablelayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="150px"
-            android:stretchColumns="*"> </TableLayout>
-
+            android:stretchColumns="*"></TableLayout>
     </ScrollView>
 
     <ImageButton
@@ -46,13 +37,6 @@
         app:layout_constraintTop_toBottomOf="@+id/scroll"
         app:layout_constraintVertical_bias="0.987"
         app:srcCompat="@drawable/add" />
-
-    <SearchView
-        android:id="@+id/search_view"
-        android:layout_width="395dp"
-        android:layout_height="50dp"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="0dp" />
 
 
 </android.support.constraint.ConstraintLayout>
