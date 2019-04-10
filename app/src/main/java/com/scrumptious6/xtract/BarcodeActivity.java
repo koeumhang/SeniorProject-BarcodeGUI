@@ -132,8 +132,8 @@ public class BarcodeActivity extends AppCompatActivity {
                                     if (dB_Name.equals("Inventory_Table")) {
                                         db.insertScannedItem(cursor_SL.getString(0));
                                     }
-
-                                } else {
+                                }
+                                else {
                                     db.insertScannedItem(result.getContents());
                                 }
                             }
