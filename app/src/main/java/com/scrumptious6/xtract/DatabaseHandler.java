@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "Inventory.dbHandler";
+    private static final String DATABASE_NAME = "Inventory.db";
     public static final String DATABASE_TABLE = "Inventory_Table";
     public static final String DATABASE_TEMP_TABLE = "Scanlist_Table";
 
@@ -31,6 +31,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String SCANLIST_SAFETY_STOCK = "SCANLIST_SAFETY_STOCK";
 
     public DatabaseHandler(Context context) {
+
         super(context, DATABASE_NAME, null, 1);
     }
 
@@ -62,18 +63,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS "+ DATABASE_TEMP_TABLE);
         onCreate(db);
     }
-
     //To insert Scanned Items into the table
-    public boolean insertScannedItem(String name){
+    public boolean insertScannedItem(String barcode, String atp, String bin, String plant, String stock){
         SQLiteDatabase idb = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(BARCODE, name);
-        String value = "0";
-        String plant = "S095";
-        contentValues.put(SCANLIST_ITEM_ATP, value);
-        contentValues.put(SCANLIST_ITEM_STORAGE_BIN, value);
-        contentValues.put(SCANLIST_ITEM_PLANT,plant);
-        contentValues.put(SCANLIST_SAFETY_STOCK,value);
+        contentValues.put(BARCODE, barcode);
+        contentValues.put(SCANLIST_ITEM_ATP, atp);
+        contentValues.put(SCANLIST_ITEM_STORAGE_BIN, bin);
+        contentValues.put(SCANLIST_ITEM_PLANT, plant);
+        contentValues.put(SCANLIST_SAFETY_STOCK, stock);
         long result = idb.insert(DATABASE_TEMP_TABLE, null, contentValues);
         return result != -1; //if result = -1 data absent insert
     }
@@ -111,12 +109,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void clearDatabase(){
         SQLiteDatabase db = this.getReadableDatabase();
         db.delete(DATABASE_TABLE, null, null);
-    }
-
-    public void clearScanlist(){
-        SQLiteDatabase db = this.getReadableDatabase();
-        db.delete(DATABASE_TEMP_TABLE, null, null);
-        //db.execSQL("DROP TABLE IF EXISTS DATABASE_TEMP_TABLE");
     }
 
     public boolean importDatabase(StringBuilder statement) throws IOException {
