@@ -269,3 +269,5 @@ public class ScanlistActivity extends AppCompatActivity
         return contactList;
     }
 }
+
+

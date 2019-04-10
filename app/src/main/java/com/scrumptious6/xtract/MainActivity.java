@@ -18,7 +18,6 @@ import com.google.zxing.integration.android.IntentResult;
 //
 public class MainActivity extends AppCompatActivity {
 
-    DatabaseHandler db;
     private ImageButton scanButton;
     private ImageButton manageButton;
     private ImageButton importButton;
@@ -65,27 +64,5 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    /*
-        This method will process the result of the scanned barcode.
-     */
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if(result != null) {
-            if(result.getContents() == null) {
-                Log.d("MainActivity", "Cancelled scan");
-                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
-            } else {
-                Log.d("MainActivity", "Scanned");
-                ///Add the scanned items in the database///
-                db = new DatabaseHandler(this);
-                db.insertScannedItem(result.getContents());
 
-                Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
-            }
-        } else {
-            // This is important, otherwise the result will not be passed to the fragment
-            super.onActivityResult(requestCode, resultCode, data);
-        }
-    }
 } // End of MainActivity class
