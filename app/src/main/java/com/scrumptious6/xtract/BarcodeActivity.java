@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,14 +41,12 @@ public class BarcodeActivity extends AppCompatActivity {
         if (result != null) {
             if (result.getContents() == null) {
                 Log.d("MainActivity", "Cancelled scan");
-                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
                 finish();
             } else {
                 Log.d("MainActivity", "Scanned");
-                Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
 
                 // Retrieve information on the scanned item
-                retreiveScannedInformation("ScanList_Table", "BARCODE", result);
+                retreiveScannedInformation(result);
             }
         } else {
             // This is important, otherwise the result will not be passed to the fragment
@@ -55,45 +54,95 @@ public class BarcodeActivity extends AppCompatActivity {
         }
     }
 
-    private void retreiveScannedInformation(final String dB_Name, final String columnName, final IntentResult result) {
+    private void retreiveScannedInformation(final IntentResult result) {
+        //keep track of the database where item was found, if at all
+        final String dB_Name;
+        //keep track of the cursor containing the items information
+        final Cursor cursor_final;
         LayoutInflater layoutInflater = LayoutInflater.from(BarcodeActivity.this);
-        View promptView = layoutInflater.inflate(R.layout.scanlist_popup_dialog, null);
+        final View promptView = layoutInflater.inflate(R.layout.scanlist_popup_dialog, null);
+
 
         //create the text for scanned item dialog
+        final TextView title = promptView.findViewById(R.id.titleValue);
         final TextView barcode = promptView.findViewById(R.id.barcodeValue);
         final TextView atp = promptView.findViewById(R.id.atpValue);
         final TextView storageBin = promptView.findViewById(R.id.storageValue);
         final TextView plant = promptView.findViewById(R.id.plantValue);
         final TextView safetyStock = promptView.findViewById(R.id.stockValue);
+        //retrieve the EditText fields
+        final EditText atp_editable = promptView.findViewById(R.id.atp_editable_value);
+        final EditText bin_editable = promptView.findViewById(R.id.storage_editable_value);
 
         //create buttons for quantity addition/subtraction on dialog box
-        Button addButton = promptView.findViewById(R.id.addButton);
-        Button subButton = promptView.findViewById(R.id.subButton);
+        final Button addButton = promptView.findViewById(R.id.addButton);
+        final Button subButton = promptView.findViewById(R.id.subButton);
 
         //assign a DatabaseHandler and
         db = new DatabaseHandler(this);
+        //Query the scanlist for the scanned item
         final SQLiteDatabase db_scannedlist = db.getReadableDatabase();
-        String selectQuery = "SELECT * FROM " + dB_Name +
-                " WHERE " + columnName + " = '" + result.getContents() + "';";
-        final Cursor cursor_SL = db_scannedlist.rawQuery(selectQuery, null);
-        if (cursor_SL.getCount() <= 0) {
-            if (dB_Name.equals("Inventory_Table")) {
-                Toast.makeText(this, "No record found!\nAdd to Scan List", Toast.LENGTH_LONG).show();
-            } else {
-                retreiveScannedInformation("Inventory_Table", "MATERIAL_NUM", result);
+        String selectQuery = "SELECT * FROM ScanList_Table" +
+                " WHERE BARCODE = '" + result.getContents() + "';";
+        Cursor cursor = db_scannedlist.rawQuery(selectQuery, null);
+
+        //Check if scanned item was NOT in scanlist
+        if (cursor.getCount() <= 0) {
+            //Query the application database for the scanned item
+            selectQuery = "SELECT * FROM Inventory_Table" +
+                    " WHERE MATERIAL_NUM = '" + result.getContents() + "';";
+            cursor = db_scannedlist.rawQuery(selectQuery, null);
+
+            //Check if scanned item was NOT in application database, display error and dialog
+            if (cursor.getCount() <= 0) {
+                title.setText("New Item Information");
+                barcode.setText("Barcode:   " + result.getContents());
+                //Assign empty to database name as neither scanlist nor the application database had the scanned item
+                dB_Name = "Empty";
+                //Assign null to final cursor
+                //make the TextViews for ATP and Storage Bin invisible and EditTexts visible
+                atp.setVisibility(View.GONE);
+                atp_editable.setVisibility(View.VISIBLE);
+                storageBin.setVisibility(View.GONE);
+                bin_editable.setVisibility(View.VISIBLE);
+
+                //Make buttons invisible
+                addButton.setVisibility(View.GONE);
+                subButton.setVisibility(View.GONE);
+
+                cursor_final = null;
+                Toast.makeText(this, "No record found: Add to scanlist", Toast.LENGTH_LONG).show();
+            }
+            //Item was found in the application database, display dialog
+            else {
+                //Assign Inventory_Table to database name as scanned item was found there
+                dB_Name = "Inventory_Table";
+                //Assign cursor to final cursor
+                cursor_final = cursor;
+                cursor.moveToFirst();
+                //Assign text values to the dialog TextViews
+                title.setText("Database Item Information");
+                barcode.setText("Material Num: " + cursor.getString(0));
+                atp.setText("ATP: " + String.valueOf(cursor.getString(3)));
+                storageBin.setText("Storage Bin: " + cursor.getString(2));
+                plant.setText("Plant: S095");
+                safetyStock.setText("Safety Stock: 0");
             }
         }
-
-        //Assign text values to the popup items
-        if (cursor_SL.getCount() <= 0) {
-            barcode.setText("Barcode:   " + result.getContents());
-        } else {
-            cursor_SL.moveToFirst();
-            barcode.setText("Barcode:   " + cursor_SL.getString(0));
-            atp.setText("ATP:   " + String.valueOf(cursor_SL.getString(1)));
-            storageBin.setText("Storage Bin:    " + cursor_SL.getString(2));
-            plant.setText("Plant:       S095");
-            safetyStock.setText("Safety Stock:       0");
+        //Scanned item was found in the scanlist, display dialog
+        else {
+            //Assign ScanList_Table to database name as scanned item was found there
+            dB_Name = "ScanList_Table";
+            //Assign cursor to final cursor
+            cursor_final = cursor;
+            cursor.moveToFirst();
+            //Assign text values to the dialog TextViews
+            title.setText("Scanlist Item Information");
+            barcode.setText("Barcode: " + cursor.getString(0));
+            atp.setText("ATP: " + String.valueOf(cursor.getString(1)));
+            storageBin.setText("Storage Bin: " + cursor.getString(2));
+            plant.setText("Plant: S095");
+            safetyStock.setText("Safety Stock: 0");
         }
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(BarcodeActivity.this);
@@ -120,22 +169,48 @@ public class BarcodeActivity extends AppCompatActivity {
                                 finish();
                             }
                         })
-
                 .setNeutralButton("Add",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                String selectQuery = "SELECT * FROM " + dB_Name +
-                                        " WHERE BARCODE = '" + result.getContents() + "';";
-                                final Cursor cursor_SL = db_scannedlist.rawQuery(selectQuery, null);
-
-                                if (cursor_SL.getCount() <= 0) {
-                                    if (dB_Name.equals("Inventory_Table")) {
-                                        db.insertScannedItem(cursor_SL.getString(0));
+                                //check if listed item is already in scanlist
+                                if (dB_Name.equals("ScanList_Table")) {
+                                    Toast.makeText(BarcodeActivity.this, "Item is already in the scanlist", Toast.LENGTH_LONG).show();
+                                }
+                                //check if listed item is a new entry, add into scanlist
+                                else if (dB_Name.equals("Empty")) {
+                                    if (!atp_editable.getText().toString().isEmpty()&& !bin_editable.getText().toString().isEmpty()) {
+                                        String atp_input = atp_editable.getText().toString();
+                                        try {
+                                            Integer.parseInt(atp_input);
+                                            db.insertScannedItem(result.getContents(), atp_editable.getText().toString(), bin_editable.getText().toString());
+                                            Toast.makeText(BarcodeActivity.this, "Item has been added to the scanlist", Toast.LENGTH_LONG).show();
+                                        } catch (NumberFormatException e) {
+                                            atp_editable.setError(atp_input + " is not a number");
+                                            Toast.makeText(BarcodeActivity.this, "Error: Invalid data\nScan item and try again", Toast.LENGTH_LONG).show();
+                                        }
+                                    }
+                                    else {
+                                        Toast.makeText(BarcodeActivity.this, "Error: Scan item again, fill in missing values and select add", Toast.LENGTH_LONG).show();
                                     }
                                 }
+                                //item is in the application database
                                 else {
-                                    db.insertScannedItem(result.getContents());
+                                    cursor_final.moveToFirst();
+                                    //copy the information into the scanlist
+                                    db.insertScannedItem(cursor_final.getString(0),
+                                            cursor_final.getString(3),
+                                            cursor_final.getString(2)
+                                    );
+                                    Toast.makeText(BarcodeActivity.this, "Item has been copied to the scanlist", Toast.LENGTH_LONG).show();
                                 }
+                                //relaunch the scanner
+                                IntentIntegrator integrator = new IntentIntegrator(BarcodeActivity.this);
+                                integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
+                                integrator.setPrompt("Scan");
+                                integrator.setCameraId(0);
+                                integrator.setBeepEnabled(true);
+                                integrator.setBarcodeImageEnabled(false);
+                                integrator.initiateScan();
                             }
                         });
         // create an alert dialog
@@ -150,21 +225,22 @@ public class BarcodeActivity extends AppCompatActivity {
                 if (dB_Name.equals("ScanList_Table")) {
                     String selectQuery = "SELECT * FROM " + DatabaseHandler.DATABASE_TEMP_TABLE +
                             " WHERE BARCODE = '" + result.getContents() + "';";
-                    final Cursor cursor_SL_update = db_scannedlist.rawQuery(selectQuery, null);
+                    //create an cursor to track updated value, create a database to track changes in database
+                    final Cursor cursor_update = db_scannedlist.rawQuery(selectQuery, null);
                     final SQLiteDatabase db_updateScanList;
 
-                    cursor_SL_update.moveToFirst();
+                    cursor_update.moveToFirst();
                     db_updateScanList = db.getWritableDatabase();
-                    int atp_current = Integer.parseInt(cursor_SL.getString(1));
-                    int atp_update = Integer.parseInt(cursor_SL_update.getString(1)) + 1;
+                    int atp_current = Integer.parseInt(cursor_final.getString(1));
+                    int atp_update = Integer.parseInt(cursor_update.getString(1)) + 1;
 
                     ContentValues contentValues = new ContentValues();
                     contentValues.put("SCANLIST_ITEM_ATP", atp_update);
-                    contentValues.put("SCANLIST_ITEM_STORAGE_BIN", cursor_SL.getString(2));
-                    db_updateScanList.update("Scanlist_Table", contentValues, "BARCODE=?", new String[]{cursor_SL_update.getString(0)});
+                    contentValues.put("SCANLIST_ITEM_STORAGE_BIN", cursor_final.getString(2));
+                    db_updateScanList.update("Scanlist_Table", contentValues, "BARCODE=?", new String[]{cursor_update.getString(0)});
                     atp.setText("ATP:   " + String.valueOf(atp_current) + " -> " + String.valueOf(atp_update));
                 } else {
-                    Toast.makeText(BarcodeActivity.this, "Item found in the application's database\nCannot modify quantity", Toast.LENGTH_LONG).show();
+                    Toast.makeText(BarcodeActivity.this, "Scanned item was not in the scanlist\nCannot modify quantity", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -173,22 +249,27 @@ public class BarcodeActivity extends AppCompatActivity {
         subButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String selectQuery = "SELECT * FROM " + DatabaseHandler.DATABASE_TEMP_TABLE +
-                        " WHERE BARCODE = '" + result.getContents() + "';";
-                final Cursor cursor_SL_update = db_scannedlist.rawQuery(selectQuery, null);
-                final SQLiteDatabase db_updateScanList;
+                if (dB_Name.equals("ScanList_Table")) {
+                    String selectQuery = "SELECT * FROM " + DatabaseHandler.DATABASE_TEMP_TABLE +
+                            " WHERE BARCODE = '" + result.getContents() + "';";
+                    final Cursor cursor_update = db_scannedlist.rawQuery(selectQuery, null);
+                    final SQLiteDatabase db_updateScanList;
 
 
-                cursor_SL_update.moveToFirst();
-                db_updateScanList = db.getWritableDatabase();
-                int atp_current = Integer.parseInt(cursor_SL.getString(1));
-                int atp_update = Integer.parseInt(cursor_SL_update.getString(1)) - 1;
+                    cursor_update.moveToFirst();
+                    db_updateScanList = db.getWritableDatabase();
+                    int atp_current = Integer.parseInt(cursor_final.getString(1));
+                    int atp_update = Integer.parseInt(cursor_update.getString(1)) - 1;
 
-                ContentValues contentValues = new ContentValues();
-                contentValues.put("SCANLIST_ITEM_ATP", atp_update);
-                contentValues.put("SCANLIST_ITEM_STORAGE_BIN", cursor_SL.getString(2));
-                db_updateScanList.update("Scanlist_Table", contentValues, "BARCODE=?", new String[]{cursor_SL_update.getString(0)});
-                atp.setText("ATP:   " + String.valueOf(atp_current) + " -> " + String.valueOf(atp_update));
+                    ContentValues contentValues = new ContentValues();
+                    contentValues.put("SCANLIST_ITEM_ATP", atp_update);
+                    contentValues.put("SCANLIST_ITEM_STORAGE_BIN", cursor_final.getString(2));
+                    db_updateScanList.update("Scanlist_Table", contentValues, "BARCODE=?", new String[]{cursor_update.getString(0)});
+                    atp.setText("ATP:   " + String.valueOf(atp_current) + " -> " + String.valueOf(atp_update));
+                }
+                else {
+                    Toast.makeText(BarcodeActivity.this, "Scanned item was not in the scanlist\nCannot modify quantity", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

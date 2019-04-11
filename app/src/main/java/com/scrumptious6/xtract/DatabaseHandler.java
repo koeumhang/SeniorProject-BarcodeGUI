@@ -64,14 +64,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
     //To insert Scanned Items into the table
-    public boolean insertScannedItem(String barcode){
+    public boolean insertScannedItem(String barcode, String atp, String bin){
         SQLiteDatabase idb = this.getWritableDatabase();
         String value = "0";
         String plant = "S095";
         ContentValues contentValues = new ContentValues();
         contentValues.put(BARCODE, barcode);
-        contentValues.put(SCANLIST_ITEM_ATP, value);
-        contentValues.put(SCANLIST_ITEM_STORAGE_BIN, value);
+        contentValues.put(SCANLIST_ITEM_ATP, atp);
+        contentValues.put(SCANLIST_ITEM_STORAGE_BIN, bin);
         contentValues.put(SCANLIST_ITEM_PLANT, plant);
         contentValues.put(SCANLIST_SAFETY_STOCK, value);
         long result = idb.insert(DATABASE_TEMP_TABLE, null, contentValues);
@@ -111,6 +111,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void clearDatabase(){
         SQLiteDatabase db = this.getReadableDatabase();
         db.delete(DATABASE_TABLE, null, null);
+    }
+
+    /////
+    public void clearScanlist(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        db.delete(DATABASE_TEMP_TABLE, null, null);
+        //db.execSQL("DROP TABLE IF EXISTS DATABASE_TEMP_TABLE");
     }
 
     public boolean importDatabase(StringBuilder statement) throws IOException {
