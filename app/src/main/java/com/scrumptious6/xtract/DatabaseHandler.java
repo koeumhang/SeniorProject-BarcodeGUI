@@ -124,13 +124,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         try {
             db.execSQL(statement.toString());
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return true;
         ///////
     }
+
 }
 
 
