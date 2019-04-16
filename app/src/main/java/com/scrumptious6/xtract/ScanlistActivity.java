@@ -81,7 +81,7 @@ public class ScanlistActivity extends AppCompatActivity
                 }
 
             }
-        });///
+        });////
 
         addB = (ImageButton) findViewById(R.id.addB);
         addB.setOnClickListener(new View.OnClickListener() {
