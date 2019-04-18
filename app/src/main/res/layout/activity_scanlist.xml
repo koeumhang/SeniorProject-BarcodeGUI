@@ -24,15 +24,15 @@
 
     <ImageButton
         android:id="@+id/addB"
-        android:layout_width="81dp"
-        android:layout_height="72dp"
+        android:layout_width="79dp"
+        android:layout_height="70dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.973"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/scroll"
         app:layout_constraintVertical_bias="0.987"
@@ -40,8 +40,8 @@
 
     <ImageButton
         android:id="@+id/searchButton"
-        android:layout_width="81dp"
-        android:layout_height="77dp"
+        android:layout_width="74dp"
+        android:layout_height="72dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
@@ -51,31 +51,14 @@
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.716"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scroll"
-        app:layout_constraintVertical_bias="0.987"
-        app:srcCompat="@drawable/search" />
-
-    <EditText
-        android:id="@+id/searchIn"
-        android:layout_width="wrap_content"
-        android:layout_height="54dp"
-        android:layout_gravity="center"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:ems="10"
-        android:hint="Barcode"
-        android:inputType="text"
-        android:textColorLink="@color/common_google_signin_btn_text_dark_focused"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.725"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.965" />
+        app:layout_constraintVertical_bias="0.987"
+        tools:srcCompat="@drawable/search" />
+
+
 
 
 </android.support.constraint.ConstraintLayout>
+

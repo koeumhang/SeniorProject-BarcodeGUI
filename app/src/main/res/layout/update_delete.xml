@@ -17,7 +17,6 @@
         android:ems="10"
         android:hint="Barcode"
         android:inputType="text"
-        android:textAlignment="viewStart"
         android:textColor="@color/common_google_signin_btn_text_dark_focused"
         android:textSize="24sp" />
 
@@ -49,7 +48,6 @@
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
         android:gravity="center"
-        android:onClick="updateButtonClicked"
         android:text="Update" />
 
     <Button
@@ -59,7 +57,6 @@
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
         android:gravity="center"
-        android:onClick="deleteButtonClicked"
         android:text="Delete" />
 
     <Button
@@ -69,7 +66,6 @@
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
         android:gravity="center"
-        android:onClick="cancelButtonClicked"
         android:text="Cancel" />
 
 
