@@ -8,6 +8,7 @@ import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -167,7 +168,7 @@ public class ScanlistActivity extends AppCompatActivity
                             //Check if scanned item was NOT in application database, display error and dialog
                             if (cursor.getCount() <= 0) {
                                 dB_Name = "Empty";
-                                if(!barcodeIn.getText().toString().isEmpty()  && !atpIn.getText().toString().isEmpty()&& !storageIn.getText().toString().isEmpty()){
+                                if(!barcodeIn.getText().toString().isEmpty() && !atpIn.getText().toString().isEmpty()&& !storageIn.getText().toString().isEmpty()){
                                     bar = barcodeIn.getText().toString();
                                     quan = atpIn.getText().toString();
                                     storage = storageIn.getText().toString();
@@ -342,10 +343,10 @@ public class ScanlistActivity extends AppCompatActivity
                                     bar = barcodeIn.getText().toString();
                                     quan = atpIn.getText().toString();
                                     storage = storageIn.getText().toString();
-                                    data.setBarcode(bar);
-                                    data.setAtp(Integer.parseInt(quan));
-                                    data.setStorage(storage);
-                                    dbh.delete(data);
+                                    //data.setBarcode(bar);
+                                    //data.setAtp(Integer.parseInt(quan));
+                                    //data.setStorage(storage);
+                                    dbh.delete(bar);
                                     tableLayout.removeAllViewsInLayout();
                                     displayTable();
                                     Toast.makeText(ScanlistActivity.this, "Item is deleted", Toast.LENGTH_SHORT).show();

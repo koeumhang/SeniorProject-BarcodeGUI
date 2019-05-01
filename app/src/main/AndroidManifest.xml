@@ -15,7 +15,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar.Fullscreen">
         <activity android:name=".EmailActivity"></activity>
-        <activity android:name=".CSVFilePage" />
         <activity android:name=".ExportActivity" />
         <activity android:name=".ImportActivity" />
         <activity android:name=".DatabaseActivity" />

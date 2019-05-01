@@ -102,11 +102,18 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return db.update(DATABASE_TEMP_TABLE,contentValues, "BARCODE=?",new String[]{s.getBarcode()});
     }
     //To delete product from the Scanlist Table
+    /*
     public int delete(DataClass s)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(DATABASE_TEMP_TABLE, "BARCODE=?",new String[]{s.getBarcode()});
+    }*/
+    public int delete(String s)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete(DATABASE_TEMP_TABLE, "BARCODE=?",new String[]{s});
     }
+
 
     public void clearDatabase(){
         SQLiteDatabase db = this.getReadableDatabase();
